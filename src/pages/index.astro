@@ -1,58 +1,171 @@
 ---
 import Base from '../layouts/Base.astro';
 import Foto from '../components/Foto.astro';
-import Tarjeta from '../components/Tarjeta.astro';
 import Cta from '../components/Cta.astro';
 import Flecha from '../components/Flecha.astro';
-import { destacados, servicios, pasos, equipo, fotos } from '../data';
+import Cifras from '../components/Cifras.astro';
+import Testimonios from '../components/Testimonios.astro';
+import Faq from '../components/Faq.astro';
+import { destacados, serviciosDet, pasos, equipo, fotos, tiposPresu, faqs } from '../data';
+
+const slides = ['las-lomas-hills-6', 'valle-de-tobalina', 'sanxenxo', 'majadahonda'].map((s) => destacados.find((p) => p.slug === s)!);
+const temas = ['Viviendas unifamiliares', 'Promociones', 'Reformas', 'Dirección de obra', 'Licencias de actividad', 'Proyecto de ejecución'];
 ---
-<Base title="Estudio de arquitectura en Madrid · 2M Arquitectos" activo="inicio"
-  description="Estudio de arquitectura en Boadilla del Monte, Madrid. Diseñamos y dirigimos viviendas unifamiliares, promociones y edificios. Pide presupuesto sin compromiso.">
+<Base title="Estudio de arquitectura en Madrid · 2M Arquitectos" activo="inicio" cabOscura
+  description="Estudio de arquitectura en Boadilla del Monte, Madrid. Diseñamos y dirigimos viviendas unifamiliares, promociones y edificios. Calcula tu presupuesto en un minuto.">
+
+  <!-- HERO: pase de proyectos -->
   <section class="hero" aria-labelledby="h1">
-    <Foto src={fotos('las-lomas-hills-6')[0]} alt="Las Lomas Hills 6 en Boadilla del Monte: vivienda blanca con piscina" sizes="100vw" prioridad class="hero-foto" />
+    <div class="hero-slides">
+      {slides.map((p, i) => (
+        <div class:list={['slide', { activa: i === 0 }]} data-i={i}>
+          <Foto src={fotos(p.slug)[0]} alt={`${p.nombre} en ${p.lugar}`} sizes="100vw" prioridad={i === 0} class="no-revela" />
+        </div>
+      ))}
+    </div>
     <div class="hero-velo" aria-hidden="true"></div>
     <div class="wrap hero-txt">
-      <h1 id="h1">Estudio de arquitectura en Madrid</h1>
+      <span class="ojo ojo-c hero-ojo">Estudio de arquitectura · Boadilla del Monte</span>
+      <h1 id="h1"><span>Casas pensadas</span> <span>para quien</span> <span>las va a vivir</span></h1>
       <div class="hero-pie">
-        <p>Desde Boadilla del Monte diseñamos y dirigimos viviendas unifamiliares, promociones y edificios en Madrid, Galicia y Málaga. Un solo equipo de arquitectos, arquitectos técnicos e ingenieros, de la idea a la obra.</p>
-        <div class="fila"><a href="/contacto/" class="btn btn-v">Pedir presupuesto</a><a href="/proyectos/" class="btn btn-c">Ver proyectos</a></div>
+        <div class="hero-q">
+          <p>¿Qué quieres construir?</p>
+          <div class="chips">
+            {tiposPresu.map((t) => <a href={`/presupuesto/?tipo=${t.id}`} class="chip">{t.t}</a>)}
+          </div>
+        </div>
+        <div class="hero-cap" aria-live="polite">
+          {slides.map((p, i) => (
+            <a href={`/proyectos/${p.slug}/`} class:list={['cap', { activa: i === 0 }]} data-i={i} tabindex={i === 0 ? 0 : -1}>
+              <span class="mono">{String(i + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</span>
+              <b>{p.nombre}</b><span>{p.lugar} <Flecha /></span>
+            </a>
+          ))}
+          <div class="barras" aria-hidden="true">{slides.map((_, i) => <button type="button" tabindex="-1" data-i={i} class:list={{ activa: i === 0 }}><i></i></button>)}</div>
+        </div>
       </div>
     </div>
+    <a href="#estudio" class="scroll-ind" aria-label="Bajar al contenido"><span></span></a>
   </section>
 
-  <section class="wrap sec" aria-labelledby="h-proy">
-    <div class="cab-sec"><h2 id="h-proy" class="h2">Proyectos destacados</h2><a href="/proyectos/" class="link">Ver todos los proyectos <Flecha /></a></div>
-    <div class="grilla" style="--min:520px;--ar:3/2">
-      {destacados.map((p) => <Tarjeta p={p} sizes="(min-width: 1100px) 50vw, 100vw" />)}
-    </div>
+  <div class="marq" aria-hidden="true"><div class="marq-in">{[0, 1].map(() => <span>{temas.map((t) => <span>{t}</span>)}</span>)}</div></div>
+
+  <!-- MANIFIESTO + CIFRAS -->
+  <section id="estudio" class="wrap sec" aria-labelledby="h-man">
+    <span class="ojo">01 — El estudio</span>
+    <h2 id="h-man" class="manif" data-palabras>Un solo equipo de arquitectos, aparejadores e ingenieros. De la primera idea a la entrega de llaves, sin intermediarios entre el diseño y la obra.</h2>
+    <Cifras />
   </section>
 
-  <section style="background:var(--piedra)" aria-labelledby="h-serv">
-    <div class="wrap sec">
-      <div class="grid-intro"><h2 id="h-serv" class="h2">Servicios</h2><p class="lead">Te acompañamos en todo el proceso con un único interlocutor. Sin intermediarios entre el diseño y la obra.</p></div>
-      <div class="cols">
-        {servicios.map((s) => <div class="serv"><h3 class="h3">{s.t}</h3><p>{s.d}</p></div>)}
+  <!-- PROYECTOS: carrusel horizontal -->
+  <section class="proy" aria-labelledby="h-proy">
+    <div class="wrap cab-sec" style="border:0;margin-bottom:28px">
+      <div style="display:grid;gap:16px"><span class="ojo">02 — Obra reciente</span><h2 id="h-proy" class="h2">Proyectos destacados</h2></div>
+      <div class="fila" style="align-items:center;gap:20px">
+        <span class="mono carr-n">01 / {String(destacados.length).padStart(2, '0')}</span>
+        <div class="flechas"><button type="button" class="c-ant" aria-label="Proyecto anterior"><Flecha dir="izq" /></button><button type="button" class="c-sig" aria-label="Proyecto siguiente"><Flecha /></button></div>
       </div>
     </div>
-  </section>
-
-  <section class="wrap sec" aria-labelledby="h-proc">
-    <h2 id="h-proc" class="h2" style="margin-bottom:clamp(40px,5vw,72px)">Cómo trabajamos</h2>
-    <ol class="cols" style="list-style:none;margin:0;padding:0">
-      {pasos.map((s, i) => (
-        <li class="paso" style="display:grid;gap:14px;align-content:start">
-          <div style="display:flex;align-items:center;gap:14px"><span style="font:300 44px/1 var(--titulo);color:var(--verde)">{i + 1}</span><span aria-hidden="true" style="flex:1;height:1px;background:var(--linea)"></span></div>
-          <h3 class="h3">{s.t}</h3><p>{s.d}</p>
-        </li>
+    <div class="carr" tabindex="0" aria-label="Proyectos destacados, desliza para ver más">
+      {destacados.map((p, i) => (
+        <a href={`/proyectos/${p.slug}/`} class="c-item" draggable="false">
+          <Foto src={fotos(p.slug)[0]} alt={`${p.nombre} en ${p.lugar}`} sizes="(min-width: 960px) 46vw, 86vw" style={`view-transition-name:foto-${p.slug}`} />
+          <div class="c-info">
+            <span class="mono">{String(i + 1).padStart(2, '0')} · {p.tipo}</span>
+            <h3>{p.nombre}</h3>
+            <p>{p.lugar}</p>
+          </div>
+          <span class="c-ver" aria-hidden="true">Ver<br>proyecto</span>
+        </a>
       ))}
-    </ol>
+      <a href="/proyectos/" class="c-item c-todos"><span>Ver los {destacados.length + 7} proyectos</span><Flecha /></a>
+    </div>
   </section>
 
+  <!-- SERVICIOS: lista con imagen que cambia -->
+  <section class="serv-sec" aria-labelledby="h-serv">
+    <div class="wrap sec serv-g">
+      <div class="serv-txt">
+        <span class="ojo ojo-c">03 — Servicios</span>
+        <h2 id="h-serv" class="h2" style="margin:20px 0 40px">Qué hacemos por ti</h2>
+        <ol class="serv-lista">
+          {serviciosDet.map((s, i) => (
+            <li data-i={i} class:list={{ activa: i === 0 }}>
+              <a href={`/servicios/#${s.id}`}>
+                <span class="mono">0{i + 1}</span>
+                <span class="s-t">{s.t}</span>
+                <Flecha />
+              </a>
+              <p>{s.d}</p>
+            </li>
+          ))}
+        </ol>
+        <a href="/servicios/" class="link" style="color:#fff;margin-top:24px">Todos los servicios <Flecha /></a>
+      </div>
+      <div class="serv-fotos" aria-hidden="true">
+        {serviciosDet.map((s, i) => <div class:list={['sf', { activa: i === 0 }]} data-i={i}><Foto src={fotos(s.foto)[1] ?? fotos(s.foto)[0]} alt="" sizes="(min-width: 960px) 45vw, 100vw" class="no-revela" /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULADORA RÁPIDA -->
+  <section class="wrap sec" aria-labelledby="h-calc">
+    <div class="calc" data-tipos={JSON.stringify(tiposPresu.map(({ id, eur, m2 }) => ({ id, eur, m2 })))}>
+      <div class="calc-izq">
+        <span class="ojo">04 — Estimación en 30 segundos</span>
+        <h2 id="h-calc" class="h2" style="margin:20px 0 16px">¿Cuánto costaría tu proyecto?</h2>
+        <p class="lead">Una primera cifra orientativa de construcción. Después afinamos el presupuesto contigo, sin compromiso.</p>
+      </div>
+      <form class="calc-form" action="/presupuesto/">
+        <fieldset>
+          <legend>Tipo de proyecto</legend>
+          <div class="seg">
+            {tiposPresu.map((t, i) => <label><input type="radio" name="tipo" value={t.id} checked={i === 0} /><span>{t.t}</span></label>)}
+          </div>
+        </fieldset>
+        <label class="rango">
+          <span class="r-top"><span>Superficie construida</span><output class="m2-out">250 m²</output></span>
+          <input type="range" name="m2" min="40" max="3000" step="10" value="250" />
+        </label>
+        <div class="resultado">
+          <span class="muted">Coste de obra orientativo</span>
+          <output class="res-out">350.000 – 550.000 €</output>
+          <span class="muted" style="font-size:13px">Estimación sin IVA ni honorarios. No es una oferta.</span>
+        </div>
+        <button class="btn btn-v btn-f magnet" type="submit">Afinar y recibir presupuesto <Flecha /></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section class="proc-sec" aria-labelledby="h-proc">
+    <div class="wrap sec">
+      <div class="grid-intro"><div style="display:grid;gap:16px"><span class="ojo">05 — Método</span><h2 id="h-proc" class="h2">Cómo trabajamos</h2></div><p class="lead">Cuatro fases claras y un mismo equipo en todas. Sabes en todo momento en qué punto está tu proyecto.</p></div>
+      <ol class="proc">
+        {pasos.map((s, i) => (
+          <li data-revela style={`--d:${i * .12}s`}>
+            <span class="p-n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="p-linea" aria-hidden="true"></span>
+            <h3 class="h3">{s.t}</h3><p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="wrap sec" aria-labelledby="h-test">
+    <div class="cab-sec" style="border:0"><div style="display:grid;gap:16px"><span class="ojo">06 — Clientes</span><h2 id="h-test" class="h2">Lo que dicen de nosotros</h2></div></div>
+    <Testimonios />
+  </section>
+
+  <!-- EQUIPO -->
   <section style="border-top:1px solid var(--linea)" aria-labelledby="h-eq">
     <div class="wrap sec eq">
-      <Foto src={fotos('torrelodones')[0]} alt="Vivienda unifamiliar aislada con piscina en Torrelodones, proyecto de 2M Arquitectos" sizes="(min-width: 1100px) 50vw, 100vw" style="aspect-ratio:4/3" />
+      <Foto src={fotos('torrelodones')[0]} alt="Vivienda unifamiliar aislada con piscina en Torrelodones, proyecto de 2M Arquitectos" sizes="(min-width: 1100px) 50vw, 100vw" style="aspect-ratio:4/5" />
       <div style="display:grid;gap:24px">
-        <h2 id="h-eq" class="h2">Un equipo completo</h2>
+        <span class="ojo">07 — Equipo</span>
+        <h2 id="h-eq" class="h2">Un equipo completo, un solo interlocutor</h2>
         <p class="lead">Arquitectos, arquitectos técnicos e ingenieros en el mismo estudio. Así el proyecto y la obra hablan el mismo idioma.</p>
         <ul class="lista">{equipo.map(([n, c]) => <li><span>{n}</span><span>{c}</span></li>)}</ul>
         <a href="/estudio/" class="link">Conoce el estudio <Flecha /></a>
@@ -60,26 +173,188 @@ import { destacados, servicios, pasos, equipo, fotos } from '../data';
     </div>
   </section>
 
-  <Cta titulo="¿Empezamos tu proyecto?" texto="Cuéntanos qué quieres construir y dónde. Te preparamos un presupuesto sin compromiso." />
+  <!-- FAQ -->
+  <section class="wrap sec faq-g" aria-labelledby="h-faq" style="border-top:1px solid var(--linea)">
+    <div style="display:grid;gap:16px;align-content:start"><span class="ojo">08 — Dudas</span><h2 id="h-faq" class="h2">Preguntas frecuentes</h2><p class="lead">¿No encuentras la tuya? Escríbenos y te respondemos hoy.</p></div>
+    <Faq items={faqs.slice(0, 4)} />
+  </section>
+
+  <Cta titulo="¿Empezamos tu proyecto?" />
 </Base>
 
 <style>
-.hero{position:relative;height:clamp(600px,60vw,880px);max-height:calc(100svh - 72px);min-height:560px;background:#363935;overflow:hidden}
-.hero :global(.hero-foto){position:absolute;inset:0}
-@supports (animation-timeline:scroll()){
-  .hero :global(.hero-foto){inset:-12% 0 0 0;animation:paralaje linear both;animation-timeline:scroll(root);animation-range:0 100vh}
-  @keyframes paralaje{from{transform:translateY(0)}to{transform:translateY(12%)}}
-}
-.hero :global(.hero-foto img){animation:revela 1.6s cubic-bezier(.16,1,.3,1) both}
-.hero-txt>*{animation:sube .9s .25s cubic-bezier(.16,1,.3,1) both}
-.hero-txt>*:nth-child(2){animation-delay:.4s}
-@keyframes revela{from{transform:scale(1.06);filter:saturate(.85)}}
-@keyframes sube{from{opacity:0;transform:translateY(16px)}}
-@media (prefers-reduced-motion:reduce){.hero :global(.hero-foto),.hero :global(.hero-foto img),.hero-txt>*{animation:none}}
-.hero-velo{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,22,20,.8) 0%,rgba(20,22,20,.4) 45%,rgba(20,22,20,.05) 75%)}
-.hero-txt{position:absolute;left:0;right:0;bottom:0;padding-bottom:clamp(32px,5vw,72px);display:grid;gap:24px}
-.hero h1{font:300 clamp(44px,6.6vw,96px)/.98 var(--titulo);letter-spacing:-.035em;color:#fff;max-width:12ch;text-wrap:balance}
-.hero-pie{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:28px}
-.hero-pie p{font-size:clamp(17px,1.4vw,19px);line-height:1.55;color:#F2EFE9;max-width:46ch}
-.eq{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:48px clamp(32px,5vw,96px);align-items:start}
+/* HERO */
+.hero{position:relative;height:100svh;min-height:620px;max-height:1100px;background:#363935;overflow:hidden;color:#fff}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.slide.activa{opacity:1}
+.slide :global(.foto){position:absolute;inset:0;background:#363935}
+.slide.activa :global(img){animation:kb 7s linear both}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero-velo{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,22,20,.85) 0%,rgba(20,22,20,.35) 50%,rgba(20,22,20,.25) 100%)}
+.hero-txt{position:absolute;left:0;right:0;bottom:0;padding-bottom:clamp(28px,4vw,56px);display:grid;gap:clamp(20px,2.4vw,32px)}
+.hero h1{font:300 clamp(46px,7.6vw,124px)/.95 var(--titulo);letter-spacing:-.045em;max-width:13ch}
+.hero h1>span{display:inline-block;animation:sube 1.1s cubic-bezier(.16,1,.3,1) both}
+.hero h1>span:nth-child(2){animation-delay:.1s}.hero h1>span:nth-child(3){animation-delay:.2s}
+.hero-ojo{animation:sube .9s cubic-bezier(.16,1,.3,1) both}
+.hero-pie{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:28px;padding-top:clamp(20px,2.4vw,32px);border-top:1px solid rgba(255,255,255,.22);animation:sube 1s .35s cubic-bezier(.16,1,.3,1) both}
+@keyframes sube{from{opacity:0;transform:translateY(24px)}}
+.hero-q p{font-size:15px;color:#E4E1DA;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-width:620px}
+.chip{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border:1px solid rgba(255,255,255,.4);border-radius:22px;color:#fff;text-decoration:none;font-size:15px;backdrop-filter:blur(6px);background:rgba(255,255,255,.06);transition:background-color .25s,color .25s,border-color .25s}
+.chip:hover{background:#fff;color:var(--texto);border-color:#fff}
+.hero-cap{position:relative;min-width:min(100%,300px);display:grid}
+.cap{grid-area:1/1;display:grid;gap:4px;color:#fff;text-decoration:none;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.cap.activa{opacity:1;transform:none;pointer-events:auto}
+.cap b{font:400 20px/1.2 var(--titulo)}.cap span{color:#D8D5CE;font-size:14px;display:flex;gap:8px;align-items:center}.cap .mono{color:#B9B5AD}
+.barras{grid-area:2/1;display:flex;gap:6px;margin-top:16px}
+.barras button{flex:1;height:20px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center}
+.barras i{display:block;width:100%;height:2px;background:rgba(255,255,255,.28);position:relative;overflow:hidden}
+.barras i::after{content:'';position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left}
+.barras .activa i::after{animation:barra 6s linear forwards}
+.barras .vista i::after{transform:scaleX(1)}
+@keyframes barra{to{transform:scaleX(1)}}
+.scroll-ind{position:absolute;right:var(--pad);top:50%;width:1px;height:72px;background:rgba(255,255,255,.25);overflow:hidden}
+.scroll-ind span{position:absolute;left:0;top:0;width:1px;height:24px;background:#fff;animation:baja 2s ease-in-out infinite}
+@keyframes baja{from{transform:translateY(-24px)}to{transform:translateY(72px)}}
+@media (max-width:759px){.scroll-ind{display:none}.hero-cap{display:none}.hero{min-height:640px}}
+@media (prefers-reduced-motion:reduce){.slide.activa :global(img),.hero h1>span,.hero-pie,.hero-ojo,.barras .activa i::after{animation:none}.barras .activa i::after{transform:scaleX(1)}}
+/* MANIFIESTO */
+.manif{font:300 clamp(30px,4vw,60px)/1.12 var(--titulo);letter-spacing:-.03em;max-width:24ch;margin:28px 0 clamp(56px,7vw,104px)}
+.manif :global(.pal){opacity:.16;transition:opacity .3s}
+.manif :global(.pal.on){opacity:1}
+/* CARRUSEL */
+.proy{padding:var(--sec) 0}
+.carr{display:grid;grid-auto-flow:column;grid-auto-columns:min(86vw,720px);gap:clamp(16px,2vw,28px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);padding-inline:var(--pad);scrollbar-width:none;cursor:grab;user-select:none}
+.carr::-webkit-scrollbar{display:none}
+.carr.arrastra{cursor:grabbing;scroll-snap-type:none}
+.carr.arrastra a{pointer-events:none}
+.c-item{position:relative;scroll-snap-align:start;color:var(--texto);text-decoration:none;display:grid;gap:18px;align-content:start}
+.c-item :global(.foto){aspect-ratio:4/3}
+.c-item :global(img){transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.c-item:hover :global(.foto.visto img),.c-item:hover :global(.foto:not(.revela) img){transform:scale(1.05)}
+.c-info{display:grid;gap:6px}
+.c-info h3{font:400 clamp(22px,2vw,28px)/1.15 var(--titulo);letter-spacing:-.02em}
+.c-info p{color:var(--suave);font-size:15px}
+.c-ver{position:absolute;top:24px;right:24px;width:96px;height:96px;border-radius:50%;background:var(--fondo);display:grid;place-items:center;text-align:center;font:500 13px/1.2 'IBM Plex Sans',sans-serif;transform:scale(0) rotate(-30deg);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.c-item:hover .c-ver{transform:scale(1) rotate(0)}
+.c-todos{background:var(--piedra);aspect-ratio:4/3;place-content:center;justify-items:center;font:300 clamp(24px,2.4vw,34px)/1.2 var(--titulo);text-align:center;padding:24px;transition:background-color .3s,color .3s}
+.c-todos:hover{background:var(--verde);color:#fff}
+/* SERVICIOS */
+.serv-sec{background:var(--osc);color:#F1EEE8}
+.serv-sec .h2{color:#fff}
+.serv-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:48px clamp(40px,6vw,112px);align-items:center}
+.serv-lista{list-style:none;margin:0;padding:0;border-top:1px solid #3B3E3A}
+.serv-lista li{border-bottom:1px solid #3B3E3A}
+.serv-lista a{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;padding:22px 0;color:#F1EEE8;text-decoration:none}
+.serv-lista .mono{color:#7F7B73}
+.s-t{font:300 clamp(24px,2.6vw,38px)/1.1 var(--titulo);letter-spacing:-.02em;transition:transform .5s cubic-bezier(.16,1,.3,1),color .3s}
+.serv-lista li.activa .s-t{transform:translateX(10px);color:#fff}
+.serv-lista li:not(.activa) .s-t{color:#8E8A82}
+.serv-lista p{font-size:16px;line-height:1.6;color:#B9B5AD;max-width:46ch;overflow:hidden;padding-left:56px}
+.serv-lista li.activa p{padding-bottom:22px}
+.serv-lista p{max-height:0}.serv-lista li.activa p{max-height:200px;transition:max-height .6s cubic-bezier(.16,1,.3,1),padding .5s}
+.serv-fotos{position:relative;aspect-ratio:4/5;overflow:hidden}
+.sf{position:absolute;inset:0;clip-path:inset(0 0 100% 0);transition:clip-path .9s cubic-bezier(.77,0,.18,1)}
+.sf.activa{clip-path:inset(0);z-index:1}
+.sf :global(.foto){height:100%}
+@media (max-width:959px){.serv-fotos{aspect-ratio:16/10;order:-1}}
+/* CALCULADORA */
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:40px clamp(40px,6vw,112px);align-items:start;background:var(--piedra);padding:clamp(28px,5vw,72px)}
+.calc-form{display:grid;gap:28px;background:var(--fondo);padding:clamp(20px,3vw,36px)}
+fieldset{border:0;padding:0;margin:0}
+legend{font-size:14px;color:var(--suave);margin-bottom:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg label{position:relative}
+.seg input{position:absolute;opacity:0}
+.seg span{display:flex;align-items:center;min-height:56px;padding:10px 14px;border:1px solid var(--linea);font-size:15px;line-height:1.3;cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
+.seg label:hover span{border-color:var(--texto)}
+.seg input:checked+span{background:var(--texto);color:#fff;border-color:var(--texto)}
+.seg input:focus-visible+span{outline:2px solid var(--verde);outline-offset:2px}
+.rango{display:grid;gap:14px}
+.r-top{display:flex;justify-content:space-between;font-size:14px;color:var(--suave)}
+.r-top output{font:500 16px 'IBM Plex Mono',monospace;color:var(--texto)}
+input[type=range]{width:100%;accent-color:var(--verde);height:28px}
+.resultado{display:grid;gap:6px;padding:20px 0;border-block:1px solid var(--linea)}
+.res-out{font:300 clamp(30px,3.4vw,46px)/1.05 var(--titulo);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+/* PROCESO */
+.proc-sec{border-top:1px solid var(--linea)}
+.proc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:40px 32px}
+.proc li{display:grid;gap:14px;align-content:start}
+.p-n{font:300 clamp(56px,5vw,80px)/1 var(--titulo);color:var(--verde);letter-spacing:-.04em}
+.p-linea{height:1px;background:var(--linea);position:relative}
+.p-linea::after{content:'';position:absolute;inset:0;background:var(--texto);transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.16,1,.3,1) calc(var(--d,0s) + .3s)}
+.proc li.visto .p-linea::after{transform:scaleX(1)}
+.proc p{font-size:16px;line-height:1.6;color:var(--cuerpo)}
+.eq{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:48px clamp(32px,5vw,96px);align-items:center}
+.faq-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:40px clamp(40px,6vw,112px)}
 </style>
+
+<script>
+  const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Pase del hero
+  const slides = [...document.querySelectorAll<HTMLElement>('.slide')];
+  const caps = [...document.querySelectorAll<HTMLElement>('.cap')];
+  const barras = [...document.querySelectorAll<HTMLButtonElement>('.barras button')];
+  let actual = 0, timer = 0;
+  const ir = (n: number) => {
+    actual = (n + slides.length) % slides.length;
+    [slides, caps, barras].forEach((grupo) => grupo.forEach((el, i) => el.classList.toggle('activa', i === actual)));
+    barras.forEach((b, i) => b.classList.toggle('vista', i < actual));
+    caps.forEach((c, i) => c.tabIndex = i === actual ? 0 : -1);
+    clearTimeout(timer);
+    if (!sinMov) timer = window.setTimeout(() => ir(actual + 1), 6000);
+  };
+  barras.forEach((b) => b.addEventListener('click', () => ir(+b.dataset.i!)));
+  ir(0);
+
+  // Manifiesto: las palabras se encienden al hacer scroll
+  const man = document.querySelector<HTMLElement>('[data-palabras]');
+  if (man && !sinMov) {
+    man.innerHTML = man.textContent!.trim().split(/\s+/).map((w) => `<span class="pal">${w}</span>`).join(' ');
+    const pals = [...man.querySelectorAll('.pal')];
+    const pintar = () => {
+      const r = man.getBoundingClientRect();
+      const k = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .35)));
+      const n = Math.round(k * pals.length);
+      pals.forEach((p, i) => p.classList.toggle('on', i < n));
+    };
+    addEventListener('scroll', () => requestAnimationFrame(pintar), { passive: true }); pintar();
+  }
+
+  // Carrusel arrastrable
+  const carr = document.querySelector<HTMLElement>('.carr')!;
+  const items = [...carr.querySelectorAll<HTMLElement>('.c-item')];
+  const paso = () => items[0].offsetWidth + parseFloat(getComputedStyle(carr).columnGap);
+  document.querySelector('.c-ant')!.addEventListener('click', () => carr.scrollBy({ left: -paso(), behavior: 'smooth' }));
+  document.querySelector('.c-sig')!.addEventListener('click', () => carr.scrollBy({ left: paso(), behavior: 'smooth' }));
+  const n = document.querySelector('.carr-n')!;
+  carr.addEventListener('scroll', () => { n.textContent = `${String(Math.min(items.length - 1, Math.round(carr.scrollLeft / paso())) + 1).padStart(2, '0')} / ${String(items.length - 1).padStart(2, '0')}`; }, { passive: true });
+  let x0 = 0, s0 = 0, abajo = false, movido = false;
+  carr.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; abajo = true; movido = false; x0 = e.clientX; s0 = carr.scrollLeft; });
+  addEventListener('pointermove', (e) => { if (!abajo) return; const dx = e.clientX - x0; if (Math.abs(dx) > 5) { movido = true; carr.classList.add('arrastra'); } carr.scrollLeft = s0 - dx; });
+  addEventListener('pointerup', () => { if (!abajo) return; abajo = false; carr.classList.remove('arrastra'); if (movido) carr.scrollBy({ left: 1, behavior: 'smooth' }); });
+
+  // Servicios: hover/foco cambia la imagen
+  const lis = [...document.querySelectorAll<HTMLElement>('.serv-lista li')];
+  const sfs = [...document.querySelectorAll<HTMLElement>('.sf')];
+  const activar = (i: number) => { lis.forEach((l, j) => l.classList.toggle('activa', i === j)); sfs.forEach((s, j) => s.classList.toggle('activa', i === j)); };
+  lis.forEach((l, i) => { l.addEventListener('pointerenter', () => activar(i)); l.addEventListener('focusin', () => activar(i)); });
+
+  // Calculadora rápida
+  const calc = document.querySelector<HTMLElement>('.calc')!;
+  const tipos: { id: string; eur: number[]; m2: number }[] = JSON.parse(calc.dataset.tipos!);
+  const f = calc.querySelector<HTMLFormElement>('form')!;
+  const rango = f.querySelector<HTMLInputElement>('[name=m2]')!;
+  const eur = (v: number) => (Math.round(v / 5000) * 5000).toLocaleString('es-ES') + ' €';
+  const calcular = (cambioTipo = false) => {
+    const t = tipos.find((x) => x.id === (f.querySelector('[name=tipo]:checked') as HTMLInputElement).value)!;
+    if (cambioTipo) rango.value = String(t.m2);
+    const m = +rango.value;
+    f.querySelector('.m2-out')!.textContent = `${m.toLocaleString('es-ES')} m²`;
+    f.querySelector('.res-out')!.textContent = `${eur(m * t.eur[0])} – ${eur(m * t.eur[1])}`;
+    rango.style.setProperty('--p', `${((m - +rango.min) / (+rango.max - +rango.min)) * 100}%`);
+  };
+  f.querySelectorAll('[name=tipo]').forEach((r) => r.addEventListener('change', () => calcular(true)));
+  rango.addEventListener('input', () => calcular());
+  calcular();
+</script>

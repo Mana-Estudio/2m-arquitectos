@@ -1,11 +1,12 @@
 ---
 import '../styles/global.css';
 import { getImage } from 'astro:assets';
-import { TEL, TEL_HREF, WA, EMAIL, fotos } from '../data';
+import { TEL, TEL_HREF, WA, EMAIL, fotos, navegacion, waTexto } from '../data';
 
-interface Props { title: string; description: string; activo?: string; image?: string }
-const { title, description, activo = '' } = Astro.props;
-const enlaces = [['proyectos', 'Proyectos', '/proyectos/'], ['estudio', 'Estudio', '/estudio/'], ['blog', 'Blog', '/blog/'], ['contacto', 'Contacto', '/contacto/']];
+interface Props { title: string; description: string; activo?: string; image?: string; cabOscura?: boolean }
+const { title, description, activo = '', cabOscura = false } = Astro.props;
+const enlaces = navegacion;
+const waHola = waTexto('Hola, 2M Arquitectos. Me gustaría hablar sobre un proyecto.');
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://www.2m-arquitectos.com');
 const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, height: 630, fit: 'cover', format: 'jpg' });
 ---
@@ -35,7 +36,8 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
 <script is:inline>document.documentElement.classList.add('js')</script>
 </head>
 <body>
-<header class="cab">
+<div class="progreso" aria-hidden="true"></div>
+<header class:list={['cab', { 'cab-osc': cabOscura }]}>
   <div class="wrap cab-in">
     <a href="/" class="logo" aria-label="2M Arquitectos, ir al inicio"><span class="cuadro" aria-hidden="true"></span><b>2M</b><span>arquitectos</span></a>
     <nav aria-label="Principal" class="nav-esc">
@@ -43,7 +45,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
     </nav>
     <div class="cab-acc">
       <a href={TEL_HREF} class="cab-tel"><span class="muted">Tel.</span> {TEL}</a>
-      <a href="/contacto/" class="btn btn-v cab-btn">Presupuesto</a>
+      <a href="/presupuesto/" class="btn btn-v cab-btn"><span class="pulso" aria-hidden="true"></span>Calcular presupuesto</a>
       <button type="button" class="hamb" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span></span><span></span></button>
     </div>
   </div>
@@ -51,9 +53,9 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
     <div class="menu-top"><span class="logo"><b>2M</b><span>arquitectos</span></span><button type="button" class="cerrar" aria-label="Cerrar menú"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.25"/></svg></button></div>
     <nav aria-label="Principal móvil" class="menu-nav">
       <a href="/">Inicio</a>
-      {enlaces.map(([, t, h]) => <a href={h}>{t}</a>)}
+      {enlaces.map(([, t, h], i) => <a href={h} style={`--i:${i}`}>{t}</a>)}
     </nav>
-    <div class="menu-pie"><a class="btn btn-l" href={TEL_HREF}>Llamar al {TEL}</a><a class="btn btn-v" href="/contacto/">Pedir presupuesto</a></div>
+    <div class="menu-pie"><a class="btn btn-l" href={TEL_HREF}>Llamar al {TEL}</a><a class="btn btn-v" href="/presupuesto/">Calcular presupuesto</a></div>
   </div>
 </header>
 
@@ -74,7 +76,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
       </div>
       <div>
         <h2>Navegación</h2>
-        <a href="/proyectos/">Proyectos</a><a href="/estudio/">Estudio</a><a href="/blog/">Blog</a><a href="/contacto/">Contacto y presupuesto</a>
+        {enlaces.map(([, t, h]) => <a href={h}>{t}</a>)}<a href="/presupuesto/">Calcular presupuesto</a>
       </div>
       <div>
         <h2>Síguenos</h2>
@@ -90,7 +92,12 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
   </div>
 </footer>
 
-<a href={WA} class="wa" aria-label={`Escribir por WhatsApp al ${TEL}`} rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg>WhatsApp</a>
+<nav class="barra-movil" aria-label="Contacto rápido">
+  <a href={TEL_HREF}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>Llamar</a>
+  <a href={waHola} rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>WhatsApp</a>
+  <a href="/presupuesto/" class="bm-v">Presupuesto</a>
+</nav>
+<a href={waHola} class="wa"aria-label={`Escribir por WhatsApp al ${TEL}`} rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg>WhatsApp</a>
 
 <div class="cookies" role="region" aria-label="Aviso de cookies" hidden>
   <p>Usamos cookies propias y de análisis. <a href="https://www.2m-arquitectos.com/politica-de-cookies/">Más información</a></p>
@@ -126,7 +133,36 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
 .menu-nav{display:flex;flex-direction:column;padding:16px 20px}
 .menu-nav a{font:400 30px/1 var(--titulo);letter-spacing:-.02em;text-decoration:none;padding:20px 0;border-bottom:1px solid var(--linea)}
 .menu-pie{margin-top:auto;padding:20px;display:grid;gap:10px}
-@media (max-width:959px){.nav-esc,.cab-tel{display:none}.hamb{display:flex}.cab-acc{gap:8px}.cab-btn{padding:0 16px}}
+@media (max-width:1100px){.cab-tel{display:none}}
+@media (max-width:959px){.nav-esc{display:none}.hamb{display:flex}.cab-acc{gap:8px}.cab-btn{padding:0 16px}}
+@media (max-width:420px){.cab-btn{display:none}}
+.cab-btn{gap:10px}
+.pulso{width:7px;height:7px;border-radius:50%;background:#B9E0C4;box-shadow:0 0 0 0 rgba(185,224,196,.7);animation:pulso 2.4s infinite}
+@keyframes pulso{70%{box-shadow:0 0 0 8px rgba(185,224,196,0)}100%{box-shadow:0 0 0 0 rgba(185,224,196,0)}}
+.nav-esc a{position:relative;border-bottom:0!important}
+.nav-esc a::after{content:'';position:absolute;left:0;right:0;bottom:6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.nav-esc a:hover::after,.nav-esc a[aria-current]::after{transform:scaleX(1);transform-origin:left}
+/* cabecera transparente sobre foto */
+.cab-osc:not(.bajado){background:transparent;border-color:rgba(255,255,255,.18);color:#fff}
+.cab-osc:not(.bajado) :is(.logo,.nav-esc a,.cab-tel,.cab-tel .muted){color:#fff}
+.cab-osc:not(.bajado) .cuadro{background:#fff}
+.cab-osc:not(.bajado) .hamb{border-color:rgba(255,255,255,.4)}.cab-osc:not(.bajado) .hamb span{background:#fff}
+.cab-osc{position:fixed;left:0;right:0;transition:background-color .35s ease,transform .45s cubic-bezier(.16,1,.3,1),box-shadow .3s ease}
+.progreso{position:fixed;top:0;left:0;right:0;height:2px;background:var(--verde);transform:scaleX(0);transform-origin:left;z-index:90;pointer-events:none}
+.menu-nav a{animation:menu-a .6s calc(var(--i,0)*60ms + .05s) cubic-bezier(.16,1,.3,1) both}
+@keyframes menu-a{from{opacity:0;transform:translateY(20px)}}
+.menu:not([hidden]){animation:lb-fade .3s ease}@keyframes lb-fade{from{opacity:0}}
+/* barra de contacto en móvil */
+.barra-movil{display:none}
+@media (max-width:759px){
+  .barra-movil{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:1fr 1fr 1.3fr;background:var(--fondo);border-top:1px solid var(--linea);padding-bottom:env(safe-area-inset-bottom);transform:translateY(100%);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+  body.scrolleado .barra-movil{transform:none}
+  body.ck-on .barra-movil{transform:translateY(100%)}
+  .barra-movil a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;font:500 15px 'IBM Plex Sans',sans-serif;text-decoration:none;color:var(--texto);border-right:1px solid var(--linea)}
+  .barra-movil .bm-v{background:var(--verde);color:#fff;border:0}
+  .wa{display:none!important}
+  .pie-legal{padding-bottom:80px}
+}
 .pie{background:var(--osc);color:#E9E6E0;padding-top:clamp(56px,7vw,96px)}
 .pie a{color:#E9E6E0;text-decoration:none;font-size:15px;min-height:44px;display:flex;align-items:center}.pie a:hover{color:#fff;text-decoration:underline}
 .pie h2{font:500 13px/1.4 'IBM Plex Sans',sans-serif;color:#9C988F;margin-bottom:4px}
@@ -159,13 +195,39 @@ body.ck-on .wa{bottom:var(--ck-h,120px)}
 <script>
   // Revelado de fotos y títulos al entrar en pantalla
   const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const revelables = document.querySelectorAll<HTMLElement>('.foto:not(.no-revela), .h2, .h2s, .cta h2');
+  const revelables = document.querySelectorAll<HTMLElement>('.foto:not(.no-revela), .h2, .h2s, .cta h2, [data-revela]');
   if (!sinMov && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); }
     }), { rootMargin: '0px 0px -8% 0px' });
     revelables.forEach((el) => { el.classList.add('revela'); io.observe(el); });
   }
+  // Contadores que suben al entrar en pantalla
+  const contadores = document.querySelectorAll<HTMLElement>('[data-cuenta]');
+  const contar = (el: HTMLElement) => {
+    const fin = +el.dataset.cuenta!, t0 = performance.now(), dur = 1600;
+    const paso = (t: number) => {
+      const k = Math.min(1, (t - t0) / dur), v = 1 - Math.pow(1 - k, 4);
+      el.textContent = Math.round(fin * v).toLocaleString('es-ES');
+      if (k < 1) requestAnimationFrame(paso);
+    };
+    requestAnimationFrame(paso);
+  };
+  if (!sinMov && 'IntersectionObserver' in window) {
+    const ioC = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { contar(e.target as HTMLElement); ioC.unobserve(e.target); } }), { threshold: .6 });
+    contadores.forEach((c) => { c.textContent = '0'; ioC.observe(c); });
+  }
+  // Botones magnéticos (solo con puntero fino)
+  if (!sinMov && matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll<HTMLElement>('.magnet').forEach((b) => {
+      b.addEventListener('pointermove', (e) => {
+        const r = b.getBoundingClientRect();
+        b.style.translate = `${(e.clientX - r.left - r.width / 2) * .18}px ${(e.clientY - r.top - r.height / 2) * .28}px`;
+      });
+      b.addEventListener('pointerleave', () => { b.style.translate = ''; });
+    });
+  }
+  const barra = document.querySelector<HTMLElement>('.progreso')!;
   // Cabecera: sombra al bajar, se oculta al bajar y vuelve al subir
   const cab = document.querySelector<HTMLElement>('.cab')!;
   let ultimo = scrollY, pendiente = false;
@@ -174,6 +236,8 @@ body.ck-on .wa{bottom:var(--ck-h,120px)}
     requestAnimationFrame(() => {
       const y = scrollY;
       cab.classList.toggle('bajado', y > 8);
+      barra.style.transform = `scaleX(${y / Math.max(1, document.documentElement.scrollHeight - innerHeight)})`;
+      document.body.classList.toggle('scrolleado', y > 500);
       cab.classList.toggle('oculta', y > 400 && y > ultimo && !document.querySelector('.menu:not([hidden])'));
       ultimo = y; pendiente = false;
     });

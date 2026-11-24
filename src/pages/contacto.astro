@@ -1,71 +1,125 @@
 ---
 import Base from '../layouts/Base.astro';
 import Flecha from '../components/Flecha.astro';
-import { TEL, TEL_HREF, WA, EMAIL } from '../data';
+import Faq from '../components/Faq.astro';
+import { TEL, TEL_HREF, WA, EMAIL, waTexto, faqs } from '../data';
 const mapa = 'https://www.google.com/maps/search/?api=1&query=Glorieta+Virgen+de+las+Nieves+4+Boadilla+del+Monte';
+const embed = 'https://maps.google.com/maps?q=Glorieta%20Virgen%20de%20las%20Nieves%204%2C%20Boadilla%20del%20Monte&z=16&output=embed';
+// MUESTRA: horario a confirmar con el estudio
+const horario = [['Lunes a jueves', '9:00 – 14:00 · 16:00 – 19:00'], ['Viernes', '9:00 – 15:00'], ['Sábado y domingo', 'Cerrado']];
 ---
-<Base title="Contacto y presupuesto · 2M Arquitectos" activo="contacto"
-  description="Pide presupuesto a 2M Arquitectos, estudio de arquitectura en Boadilla del Monte. Llámanos al 609 071 175 o escríbenos por WhatsApp.">
-  <div class="wrap" style="padding-top:clamp(48px,6vw,96px);padding-bottom:var(--sec)">
-    <div style="display:grid;gap:18px;margin-bottom:clamp(40px,5vw,72px)">
-      <h1 class="h1">Pide presupuesto</h1>
-      <p class="lead">Cuéntanos tu proyecto en unas líneas. Te llamamos para concretarlo y te enviamos un presupuesto sin compromiso.</p>
+<Base title="Contacto · 2M Arquitectos" activo="contacto"
+  description="Contacta con 2M Arquitectos, estudio de arquitectura en Boadilla del Monte. Llámanos al 609 071 175, escríbenos por WhatsApp o calcula tu presupuesto.">
+  <div class="wrap" style="padding-top:clamp(48px,6vw,96px)">
+    <div class="c-intro">
+      <h1 class="h1">Hablemos de tu proyecto</h1>
+      <p class="lead">Elige cómo prefieres contactar. Respondemos en menos de 24 horas laborables y la primera reunión no tiene coste.</p>
     </div>
+
+    <div class="canales">
+      <a href={waTexto('Hola, 2M Arquitectos. Me gustaría hablar sobre un proyecto.')} class="canal c-wa" rel="noopener" data-revela>
+        <span class="c-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></span>
+        <span class="c-et">La más rápida</span><b>WhatsApp</b><span>Escríbenos y te respondemos hoy</span><Flecha />
+      </a>
+      <a href={TEL_HREF} class="canal" data-revela style="--d:.08s">
+        <span class="c-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg></span>
+        <span class="c-et">Lunes a viernes</span><b>{TEL}</b><span>Llámanos y hablamos</span><Flecha />
+      </a>
+      <a href="/presupuesto/" class="canal" data-revela style="--d:.16s">
+        <span class="c-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="3" width="16" height="18"/><path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2"/></svg></span>
+        <span class="c-et">En 1 minuto</span><b>Calcular presupuesto</b><span>Estimación orientativa al momento</span><Flecha />
+      </a>
+    </div>
+
     <div class="dos">
       <section aria-labelledby="h-form" class="bloque">
-        <h2 id="h-form" class="h2s" style="margin-bottom:24px">Formulario de presupuesto</h2>
-        <form class="form" data-email={EMAIL}>
+        <h2 id="h-form" class="h2s" style="margin-bottom:8px">Cuéntanos en unas líneas</h2>
+        <p class="muted" style="margin-bottom:24px;font-size:15px">Al enviar se abre WhatsApp con tu mensaje ya escrito.</p>
+        <form class="form" data-wa={WA}>
           <label>Nombre<input name="nombre" required autocomplete="name"></label>
           <label>Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
-          <label class="full">Email<input name="email" type="email" required autocomplete="email"></label>
           <label>Tipo de proyecto<select name="tipo" required><option value="">Elige una opción</option><option>Vivienda unifamiliar</option><option>Promoción de viviendas</option><option>Edificio</option><option>Terciario</option><option>Reforma</option><option>Licencia de actividad</option></select></label>
           <label>Zona<select name="zona" required><option value="">Elige una zona</option><option>Madrid, zona oeste</option><option>Resto de Madrid</option><option>Galicia</option><option>Málaga</option><option>Otra</option></select></label>
-          <label class="full">Mensaje<textarea name="mensaje" rows="5" placeholder="Parcela, metros aproximados, plazos…"></textarea></label>
+          <label class="full">Mensaje<textarea name="mensaje" rows="4" placeholder="Parcela, metros aproximados, plazos…"></textarea></label>
           <label class="full check"><input type="checkbox" required><span>He leído y acepto la <a href="https://www.2m-arquitectos.com/politica-de-privacidad/">política de privacidad</a>.</span></label>
-          <div class="full fila" style="align-items:center;gap:16px"><button type="submit" class="btn btn-v" style="min-height:56px;padding:0 36px">Enviar solicitud</button><span class="muted" style="font-size:14px">Todos los campos son obligatorios salvo el mensaje.</span></div>
+          <div class="full"><button type="submit" class="btn btn-v btn-f magnet" style="min-height:56px;padding:0 36px">Enviar por WhatsApp <Flecha /></button></div>
         </form>
         <div class="ok" role="status" hidden>
-          <p style="font:400 26px/1.2 var(--titulo)">Gracias. Ya casi está.</p>
-          <p class="lead">Se ha abierto tu programa de correo con la solicitud lista: solo tienes que enviarla. Si lo prefieres, escríbenos por WhatsApp.</p>
+          <p style="font:400 26px/1.2 var(--titulo)">¡Gracias! Ya casi está.</p>
+          <p class="lead">Se ha abierto WhatsApp con tu mensaje: solo tienes que pulsar enviar.</p>
         </div>
       </section>
-      <aside aria-labelledby="h-datos" class="bloque" style="display:grid;gap:32px">
-        <h2 id="h-datos" class="h2s">¿Prefieres hablar?</h2>
-        <div style="display:grid;gap:6px"><span class="muted" style="font-size:14px">Teléfono</span><a href={TEL_HREF} style="font:300 clamp(40px,4.4vw,60px)/1 var(--titulo);letter-spacing:-.03em;text-decoration:none">{TEL}</a></div>
-        <div class="fila"><a href={TEL_HREF} class="btn btn-l">Llamar</a><a href={WA} class="btn btn-v" rel="noopener">Escribir por WhatsApp</a></div>
+      <aside aria-labelledby="h-datos" class="bloque" style="display:grid;gap:28px">
+        <h2 id="h-datos" class="h2s">Visítanos</h2>
+        <div class="mapa"><iframe src={embed} title="Mapa: Glorieta Virgen de las Nieves 4, Boadilla del Monte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
         <dl class="datos">
-          <div><dt>Email</dt><dd><a href={`mailto:${EMAIL}`}>{EMAIL}</a></dd></div>
           <div><dt>Dirección</dt><dd>Glorieta Virgen de las Nieves 4, local 1<br>28660 Boadilla del Monte, Madrid</dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${EMAIL}`}>{EMAIL}</a></dd></div>
+          <div><dt>Teléfonos</dt><dd><a href={TEL_HREF}>{TEL}</a> · <a href="tel:+34919289760">919 289 760</a></dd></div>
+          <div><dt>Horario</dt><dd class="horario">{horario.map(([d, h]) => <span><span>{d}</span><span class="muted">{h}</span></span>)}<span class="abierto" hidden></span></dd></div>
         </dl>
         <a href={mapa} class="link" rel="noopener">Cómo llegar <Flecha /></a>
       </aside>
     </div>
   </div>
+
+  <section class="wrap sec faq-g" aria-labelledby="h-faq">
+    <h2 id="h-faq" class="h2">Antes de escribirnos</h2>
+    <Faq items={faqs.slice(1)} />
+  </section>
 </Base>
 
 <style>
+.c-intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:18px 64px;align-items:end;margin-bottom:clamp(32px,4vw,56px)}
+.canales{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin-bottom:clamp(56px,7vw,104px)}
+.canal{position:relative;display:grid;gap:6px;padding:28px;border:1px solid var(--linea);text-decoration:none;color:var(--texto);background:#fff;overflow:hidden;isolation:isolate;transition:color .4s,border-color .4s}
+.canal::before{content:'';position:absolute;inset:0;background:var(--texto);transform:scaleY(0);transform-origin:bottom;transition:transform .55s cubic-bezier(.16,1,.3,1);z-index:-1}
+.canal:hover{color:#fff;border-color:var(--texto)}.canal:hover::before{transform:none}
+.c-wa{background:var(--verde);color:#fff;border-color:var(--verde)}.c-wa::before{background:var(--verde-osc)}
+.c-ic{width:48px;height:48px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;margin-bottom:28px;opacity:.9}
+.c-et{font:400 12px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+.canal b{font:400 clamp(24px,2.2vw,30px)/1.15 var(--titulo);letter-spacing:-.02em}
+.canal>span:last-of-type{font-size:15px;opacity:.8}
+.canal :global(.flecha){position:absolute;top:28px;right:28px}
 .dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:56px clamp(40px,6vw,120px);align-items:start}
 .bloque{border-top:1px solid var(--texto);padding-top:28px}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:20px 16px}
 .form label{display:grid;gap:8px;font-size:15px}
 .form .full{grid-column:1/-1}
-.form input:not([type=checkbox]),.form select,.form textarea{height:52px;padding:0 14px;border:1px solid #8C877E;background:#fff;font:400 16px 'IBM Plex Sans',sans-serif;color:var(--texto);border-radius:0}
+.form input:not([type=checkbox]),.form select,.form textarea{height:52px;padding:0 14px;border:1px solid #8C877E;background:#fff;font:400 16px 'IBM Plex Sans',sans-serif;color:var(--texto);border-radius:0;transition:border-color .2s,box-shadow .2s}
+.form :is(input,select,textarea):focus{outline:none;border-color:var(--verde);box-shadow:0 0 0 3px rgba(62,107,79,.18)}
 .form textarea{height:auto;padding:12px 14px;line-height:1.5;resize:vertical}
 .check{display:flex!important;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--cuerpo)}
 .check input{width:22px;height:22px;margin:0;flex:none;accent-color:var(--verde)}
 .ok{background:var(--piedra);padding:32px;display:grid;gap:12px}.ok[hidden]{display:none}
+.mapa{aspect-ratio:16/10;background:var(--piedra);overflow:hidden}
+.mapa iframe{width:100%;height:100%;border:0;filter:grayscale(1) contrast(1.05);transition:filter .6s}
+.mapa:hover iframe{filter:none}
 .datos>div{display:grid;grid-template-columns:110px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--linea)}
 .datos>div:last-child{border-bottom:1px solid var(--linea)}
-.datos dt{font-size:15px;color:var(--suave)}.datos dd{font-size:16px;line-height:1.5}
+.datos dt{font-size:15px;color:var(--suave)}.datos dd{font-size:16px;line-height:1.5;margin:0}
+.horario{display:grid;gap:6px}.horario>span{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.abierto{display:inline-flex!important;align-items:center;gap:8px;font-size:14px;margin-top:6px;justify-content:flex-start!important}
+.abierto[hidden]{display:none!important}
+.abierto::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
+.faq-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:40px clamp(40px,6vw,112px)}
 </style>
 <script>
   const form = document.querySelector<HTMLFormElement>('.form')!;
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const d = new FormData(form);
-    const cuerpo = ['nombre', 'telefono', 'email', 'tipo', 'zona', 'mensaje'].map((k) => `${k[0].toUpperCase() + k.slice(1)}: ${d.get(k) ?? ''}`).join('\n');
-    location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Solicitud de presupuesto · ' + d.get('tipo'))}&body=${encodeURIComponent(cuerpo)}`;
+    const txt = [`Hola, 2M Arquitectos. Soy ${d.get('nombre')}.`, `• Proyecto: ${d.get('tipo')}`, `• Zona: ${d.get('zona')}`, `• Teléfono: ${d.get('telefono')}`, d.get('mensaje') ? `\n${d.get('mensaje')}` : ''].filter(Boolean).join('\n');
+    window.open(`${form.dataset.wa}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
     form.hidden = true;
     (document.querySelector('.ok') as HTMLElement).hidden = false;
   });
+  // Indicador "abierto ahora" (hora de Madrid)
+  const ab = document.querySelector<HTMLElement>('.abierto')!;
+  const ahora = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
+  const d = ahora.getDay(), h = ahora.getHours() + ahora.getMinutes() / 60;
+  const abierto = (d >= 1 && d <= 4 && ((h >= 9 && h < 14) || (h >= 16 && h < 19))) || (d === 5 && h >= 9 && h < 15);
+  ab.textContent = abierto ? 'Abierto ahora' : 'Cerrado ahora · escríbenos por WhatsApp';
+  ab.style.color = abierto ? 'var(--verde)' : 'var(--suave)';
+  ab.hidden = false;
 </script>

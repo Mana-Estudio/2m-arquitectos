@@ -5,7 +5,7 @@ import Foto from '../../components/Foto.astro';
 import Tarjeta from '../../components/Tarjeta.astro';
 import Cta from '../../components/Cta.astro';
 import Flecha from '../../components/Flecha.astro';
-import { proyectos, fotos, WA, TEL, type Proyecto } from '../../data';
+import { proyectos, fotos, WA, type Proyecto } from '../../data';
 
 export function getStaticPaths() {
   return proyectos.map((p) => ({ params: { slug: p.slug }, props: { p } }));
@@ -15,17 +15,21 @@ const imgs = fotos(p.slug);
 const corto = `${p.nombre} en ${p.lugar.split(',')[0]}`;
 const galeria = imgs.slice(1).length ? imgs.slice(1) : imgs;
 const grandes = await Promise.all(galeria.map((i) => getImage({ src: i, width: Math.min(2000, i.width), format: 'webp', quality: 80 })));
-const relacionados = proyectos.filter((x) => x.slug !== p.slug).slice(0, 3);
+const idx = proyectos.findIndex((x) => x.slug === p.slug);
+const siguiente = proyectos[(idx + 1) % proyectos.length];
+const relacionados = [...proyectos.filter((x) => x.tipo === p.tipo), ...proyectos.filter((x) => x.tipo !== p.tipo)].filter((x) => x.slug !== p.slug && x.slug !== siguiente.slug).slice(0, 3);
 ---
 <Base title={`${p.nombre} en ${p.lugar} · 2M Arquitectos`} activo="proyectos"
   description={`${p.descripcion[0]} Proyecto de 2M Arquitectos, estudio de arquitectura en Boadilla del Monte.`}>
-  <Foto src={imgs[0]} alt={`${corto}: imagen principal del proyecto`} sizes="100vw" prioridad style={`height:clamp(420px,56vw,820px);max-height:calc(100svh - 72px);view-transition-name:foto-${p.slug}`} />
-
-  <div class="wrap" style="padding-top:clamp(40px,5vw,72px)">
-    <nav aria-label="Ruta" class="muted" style="font-size:14px;display:flex;gap:8px;margin-bottom:20px"><a href="/proyectos/" class="muted">Proyectos</a><span aria-hidden="true">/</span><span>{p.tipo}</span></nav>
-    <h1 style="font:300 clamp(38px,5.4vw,80px)/1.02 var(--titulo);letter-spacing:-.035em;max-width:18ch;text-wrap:balance">{p.nombre}</h1>
-    <p class="muted" style="font-size:18px;margin-top:14px">{p.lugar}</p>
-  </div>
+  <section class="d-hero">
+    <Foto src={imgs[0]} alt={`${corto}: imagen principal del proyecto`} sizes="100vw" prioridad class="d-foto" style={`view-transition-name:foto-${p.slug}`} />
+    <div class="d-velo" aria-hidden="true"></div>
+    <div class="wrap d-txt">
+      <nav aria-label="Ruta" class="d-ruta"><a href="/proyectos/">Proyectos</a><span aria-hidden="true">/</span><span>{p.tipo}</span></nav>
+      <h1>{p.nombre}</h1>
+      <p>{p.lugar}</p>
+    </div>
+  </section>
 
   <div class="wrap ficha">
     <section aria-labelledby="h-desc" style="display:grid;gap:20px;max-width:62ch">
@@ -39,13 +43,18 @@ const relacionados = proyectos.filter((x) => x.slug !== p.slug).slice(0, 3);
         <dl>
           <div><dt>Ubicación</dt><dd>{p.lugar}</dd></div>
           <div><dt>Tipología</dt><dd>{p.tipologia}</dd></div>
+          <div><dt>Categoría</dt><dd>{p.tipo}</dd></div>
+          <div><dt>Servicios</dt><dd>Proyecto y dirección de obra</dd></div>
+          <div><dt>Imágenes</dt><dd>{imgs.length}</dd></div>
         </dl>
       </div>
-      <div style="background:var(--piedra);padding:24px;display:grid;gap:14px">
+      <form class="similar" data-wa={WA} data-proy={`${p.nombre} (${p.lugar})`}>
         <p style="font:400 22px/1.25 var(--titulo)">¿Quieres un proyecto como este?</p>
-        <a href="/contacto/" class="btn btn-v">Pedir presupuesto</a>
-        <a href={WA} class="btn btn-l" rel="noopener">WhatsApp · {TEL}</a>
-      </div>
+        <p class="muted" style="font-size:14px">Déjanos tu nombre y te escribimos por WhatsApp.</p>
+        <label class="sr" for="s-n">Nombre</label><input id="s-n" name="nombre" placeholder="Tu nombre" required autocomplete="name" />
+        <button class="btn btn-v btn-f" type="submit">Lo quiero similar <Flecha /></button>
+        <a href={`/presupuesto/?tipo=${p.tipo === 'Reformas' ? 'reforma' : 'vivienda'}`} class="link" style="font-size:15px">o calcula tu presupuesto <Flecha /></a>
+      </form>
     </aside>
   </div>
 
@@ -60,7 +69,12 @@ const relacionados = proyectos.filter((x) => x.slug !== p.slug).slice(0, 3);
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="h-rel" style="padding-bottom:clamp(72px,8vw,120px)">
+  <a href={`/proyectos/${siguiente.slug}/`} class="sig-p">
+    <Foto src={fotos(siguiente.slug)[0]} alt="" sizes="100vw" class="sig-foto" />
+    <span class="wrap sig-txt"><span class="ojo ojo-c">Siguiente proyecto</span><b>{siguiente.nombre}</b><span>{siguiente.lugar} <Flecha /></span></span>
+  </a>
+
+  <section class="wrap" aria-labelledby="h-rel" style="padding-block:clamp(72px,8vw,120px)">
     <div class="cab-sec"><h2 id="h-rel" class="h2s">Proyectos relacionados</h2><a href="/proyectos/" class="link">Ver todos <Flecha /></a></div>
     <div class="grilla" style="--min:340px">{relacionados.map((r) => <Tarjeta p={r} />)}</div>
   </section>
@@ -75,6 +89,28 @@ const relacionados = proyectos.filter((x) => x.slug !== p.slug).slice(0, 3);
 </Base>
 
 <style>
+.d-hero{position:relative;height:calc(100svh - 72px);min-height:520px;max-height:960px;overflow:hidden;color:#fff;background:#363935}
+.d-hero :global(.d-foto){position:absolute;inset:0}
+@supports (animation-timeline:scroll()){.d-hero :global(.d-foto img){animation:par linear both;animation-timeline:scroll(root);animation-range:0 100vh}@keyframes par{to{transform:translateY(14%) scale(1.06)}}}
+.d-velo{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,22,20,.78),rgba(20,22,20,0) 55%)}
+.d-txt{position:absolute;left:0;right:0;bottom:0;padding-bottom:clamp(28px,4vw,56px);display:grid;gap:12px;animation:sube 1s .2s cubic-bezier(.16,1,.3,1) both}
+@keyframes sube{from{opacity:0;transform:translateY(20px)}}
+.d-ruta{display:flex;gap:8px;font-size:14px;color:#D8D5CE}.d-ruta a{color:#fff}
+.d-txt h1{font:300 clamp(40px,6vw,96px)/1 var(--titulo);letter-spacing:-.04em;max-width:16ch;text-wrap:balance}
+.d-txt p{font-size:18px;color:#E4E1DA}
+.similar{background:var(--piedra);padding:24px;display:grid;gap:12px}
+.similar input{height:52px;padding:0 14px;border:1px solid #8C877E;background:#fff;font:400 16px 'IBM Plex Sans',sans-serif;border-radius:0}
+.similar input:focus{outline:none;border-color:var(--verde);box-shadow:0 0 0 3px rgba(62,107,79,.18)}
+.sig-p{position:relative;display:block;height:clamp(320px,42vw,600px);overflow:hidden;color:#fff;text-decoration:none;background:#363935}
+.sig-p :global(.sig-foto){position:absolute;inset:0}
+.sig-p :global(.sig-foto img){transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.sig-p:hover :global(.sig-foto img){transform:scale(1.05)}
+.sig-p::after{content:'';position:absolute;inset:0;background:rgba(20,22,20,.5);transition:background-color .5s}
+.sig-p:hover::after{background:rgba(20,22,20,.3)}
+.sig-txt{position:absolute;inset:auto 0 0;z-index:1;display:grid;gap:12px;padding-bottom:clamp(28px,4vw,56px)}
+.sig-txt b{font:300 clamp(36px,5vw,80px)/1 var(--titulo);letter-spacing:-.04em}
+.sig-txt>span:last-child{display:flex;gap:10px;align-items:center;color:#E4E1DA}
+@media (prefers-reduced-motion:reduce){.d-txt,.d-hero :global(.d-foto img){animation:none}}
 .ficha{padding-top:clamp(40px,5vw,72px);padding-bottom:clamp(72px,8vw,120px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px clamp(40px,6vw,120px);align-items:start}
 .ficha-lat{display:grid;gap:28px;position:sticky;top:104px}
 dl>div{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--linea)}
@@ -110,5 +146,16 @@ dt{font-size:15px;color:var(--suave)}dd{font-size:16px}
   lb.querySelector('.lb-x')!.addEventListener('click', () => lb.close());
   lb.querySelector('.lb-ant')!.addEventListener('click', () => ver(i - 1));
   lb.querySelector('.lb-sig')!.addEventListener('click', () => ver(i + 1));
+  // Deslizar en móvil
+  let tx = 0;
+  lb.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) ver(i + (dx < 0 ? 1 : -1)); });
+  // Formulario "lo quiero similar"
+  const sim = document.querySelector<HTMLFormElement>('.similar')!;
+  sim.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = (sim.elements.namedItem('nombre') as HTMLInputElement).value.trim();
+    window.open(`${sim.dataset.wa}?text=${encodeURIComponent(`Hola, soy ${nombre}. He visto el proyecto ${sim.dataset.proy} en vuestra web y me gustaría algo similar.`)}`, '_blank', 'noopener');
+  });
   lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') ver(i + 1); if (e.key === 'ArrowLeft') ver(i - 1); });
 </script>

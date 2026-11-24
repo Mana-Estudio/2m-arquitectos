@@ -1,0 +1,6 @@
+---
+import { cifras } from '../data';
+---
+<div class="cifras">
+  {cifras.map((c, i) => <div data-revela style={`--d:${i * .1}s`}><b><span data-cuenta={c.n}>{c.n}</span>{c.suf && <small>{c.suf}</small>}</b><span>{c.t}</span></div>)}
+</div>

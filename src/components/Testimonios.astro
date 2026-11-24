@@ -1,0 +1,23 @@
+---
+import Flecha from './Flecha.astro';
+import { testimonios } from '../data';
+---
+<div class="testi">
+  <div class="testi-pista" tabindex="0" aria-label="Testimonios de clientes">
+    {testimonios.map((t) => (
+      <blockquote>
+        <p>{t.txt}</p>
+        <footer><span class="ini" aria-hidden="true">{t.n.split(' ').map((w) => w[0]).slice(0, 2).join('')}</span><span><b style="font-weight:500">{t.n}</b><br><span class="muted">{t.p}</span></span></footer>
+      </blockquote>
+    ))}
+  </div>
+  <div class="flechas"><button type="button" class="t-ant" aria-label="Testimonio anterior"><Flecha dir="izq" /></button><button type="button" class="t-sig" aria-label="Testimonio siguiente"><Flecha /></button></div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.testi').forEach((t) => {
+    const p = t.querySelector<HTMLElement>('.testi-pista')!;
+    const mover = (d: number) => p.scrollBy({ left: d * (p.firstElementChild as HTMLElement).offsetWidth, behavior: 'smooth' });
+    t.querySelector('.t-ant')!.addEventListener('click', () => mover(-1));
+    t.querySelector('.t-sig')!.addEventListener('click', () => mover(1));
+  });
+</script>

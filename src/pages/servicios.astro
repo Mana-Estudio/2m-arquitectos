@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Flecha from '../components/Flecha.astro';
+import Cta from '../components/Cta.astro';
+import Faq from '../components/Faq.astro';
+import { serviciosDet, fotos, waTexto } from '../data';
+const aTipo: Record<string, string> = { 'obra-nueva': 'vivienda', promociones: 'promocion', reformas: 'reforma', licencias: 'terciario' };
+// MUESTRA: duraciones orientativas por fase
+const fases = [
+  { t: 'Reunión y propuesta', dur: '1 semana', d: 'Visitamos la parcela, escuchamos qué necesitas y te enviamos un presupuesto cerrado.' },
+  { t: 'Anteproyecto', dur: '4–6 semanas', d: 'Distribución, volúmenes e imágenes 3D. Iteramos contigo hasta dar con la casa.' },
+  { t: 'Proyecto básico', dur: '3–4 semanas', d: 'Documentación para solicitar la licencia de obra en el ayuntamiento.' },
+  { t: 'Proyecto de ejecución', dur: '6–8 semanas', d: 'Planos constructivos, mediciones y pliegos para pedir precios a constructoras.' },
+  { t: 'Dirección de obra', dur: 'Toda la obra', d: 'Arquitecto y aparejador en obra hasta el certificado final y la entrega de llaves.' },
+];
+---
+<Base title="Servicios de arquitectura en Madrid · 2M Arquitectos" activo="servicios" cabOscura
+  description="Proyectos de vivienda unifamiliar, promociones, reformas y licencias de actividad en Madrid. Proyecto, licencia y dirección de obra con un solo equipo.">
+  <section class="s-hero" aria-labelledby="h1">
+    <div class="s-mosaico" aria-hidden="true">
+      {serviciosDet.map((s, i) => <Foto src={fotos(s.foto)[0]} alt="" sizes="50vw" prioridad={i < 2} class="no-revela" />)}
+    </div>
+    <div class="wrap s-hero-txt">
+      <span class="ojo ojo-c">Servicios</span>
+      <h1 id="h1">Del primer boceto a la entrega de llaves</h1>
+      <nav class="s-indice" aria-label="Servicios">
+        {serviciosDet.map((s, i) => <a href={`#${s.id}`}><span class="mono">0{i + 1}</span>{s.t}<Flecha /></a>)}
+      </nav>
+    </div>
+  </section>
+
+  {serviciosDet.map((s, i) => (
+    <section id={s.id} class:list={['s-bloque', { inv: i % 2 }]} aria-labelledby={`h-${s.id}`}>
+      <div class="s-foto">
+        <Foto src={fotos(s.foto)[1] ?? fotos(s.foto)[0]} alt={`Proyecto de ${s.t.toLowerCase()} de 2M Arquitectos`} sizes="(min-width: 960px) 55vw, 100vw" />
+        <span class="s-num" aria-hidden="true">0{i + 1}</span>
+      </div>
+      <div class="s-txt">
+        <span class="ojo">Servicio 0{i + 1}</span>
+        <h2 id={`h-${s.id}`} class="h2">{s.t}</h2>
+        <p class="lead">{s.d}</p>
+        <ul class="incluye">{s.incluye.map((x, j) => <li data-revela style={`--d:${j * .08}s`}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l5 5L20 6" /></svg>{x}</li>)}</ul>
+        <div class="fila">
+          <a href={`/presupuesto/?tipo=${aTipo[s.id]}`} class="btn btn-v btn-f magnet">Calcular presupuesto <Flecha /></a>
+          <a href={waTexto(`Hola, 2M Arquitectos. Me interesa el servicio de ${s.t.toLowerCase()}.`)} class="btn btn-l magnet" rel="noopener">Consultar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="fases-sec" aria-labelledby="h-fases">
+    <div class="wrap sec">
+      <div class="grid-intro"><div style="display:grid;gap:16px"><span class="ojo ojo-c">Plazos</span><h2 id="h-fases" class="h2">Cuánto tarda cada fase</h2></div><p class="lead" style="color:#C9C5BD">Plazos habituales para una vivienda unifamiliar. Te damos un calendario concreto con el presupuesto.</p></div>
+      <ol class="fases">
+        {fases.map((f, i) => (
+          <li data-revela style={`--d:${i * .1}s;--w:${[8, 30, 20, 38, 100][i]}%`}>
+            <span class="mono">0{i + 1}</span>
+            <div><h3 class="h3">{f.t}</h3><p>{f.d}</p></div>
+            <div class="f-dur"><span class="f-barra"><i></i></span><b>{f.dur}</b></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap sec faq-g" aria-labelledby="h-faq">
+    <div style="display:grid;gap:16px;align-content:start"><span class="ojo">Dudas</span><h2 id="h-faq" class="h2">Preguntas frecuentes</h2></div>
+    <Faq />
+  </section>
+
+  <Cta titulo="Cuéntanos qué necesitas" foto="navallera" />
+</Base>
+
+<style>
+.s-hero{position:relative;min-height:100svh;background:var(--osc);color:#fff;display:grid;align-items:end;overflow:hidden}
+.s-mosaico{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;opacity:.45}
+.s-mosaico :global(.foto){height:100%}
+.s-mosaico :global(img){animation:zoom 14s ease-out both}
+@keyframes zoom{from{transform:scale(1.15)}}
+.s-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--osc) 10%,rgba(29,31,28,.3))}
+.s-hero-txt{position:relative;z-index:1;padding-top:140px;padding-bottom:clamp(32px,5vw,72px);display:grid;gap:28px}
+.s-hero h1{font:300 clamp(44px,7vw,112px)/.95 var(--titulo);letter-spacing:-.045em;max-width:14ch;animation:sube 1s cubic-bezier(.16,1,.3,1) both}
+@keyframes sube{from{opacity:0;transform:translateY(24px)}}
+.s-indice{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));border-top:1px solid rgba(255,255,255,.22)}
+.s-indice a{display:flex;align-items:center;gap:12px;padding:20px 16px 20px 0;color:#fff;text-decoration:none;font:400 18px/1.2 var(--titulo);border-bottom:1px solid rgba(255,255,255,.12)}
+.s-indice a .mono{color:#9C988F}
+.s-indice a :global(.flecha){margin-left:auto;transform:rotate(90deg)}
+.s-indice a:hover{color:#B9E0C4}
+.s-bloque{display:grid;grid-template-columns:minmax(0,11fr) minmax(0,9fr);align-items:center;scroll-margin-top:0}
+.s-bloque.inv .s-foto{order:2}
+.s-foto{position:relative;height:100%;min-height:clamp(380px,48vw,760px)}
+.s-foto :global(.foto){position:absolute;inset:0}
+.s-num{position:absolute;bottom:-.12em;right:16px;font:300 clamp(120px,16vw,260px)/1 var(--titulo);letter-spacing:-.06em;color:var(--fondo);mix-blend-mode:normal;pointer-events:none}
+.s-bloque.inv .s-num{right:auto;left:16px}
+.s-txt{padding:clamp(48px,6vw,104px) var(--pad);display:grid;gap:24px;justify-items:start}
+.incluye{list-style:none;margin:0;padding:0;display:grid;gap:0;width:100%;border-top:1px solid var(--linea)}
+.incluye li{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--linea);font-size:16px}
+.incluye svg{color:var(--verde);flex:none}
+@media (max-width:959px){.s-bloque{grid-template-columns:1fr}.s-bloque.inv .s-foto{order:0}.s-foto{min-height:56vw}}
+.fases-sec{background:var(--osc);color:#F1EEE8}.fases-sec .h2{color:#fff}
+.fases{list-style:none;margin:0;padding:0;border-top:1px solid #3B3E3A}
+.fases li{display:grid;grid-template-columns:48px minmax(0,1.2fr) minmax(0,1fr);gap:16px 32px;align-items:center;padding:28px 0;border-bottom:1px solid #3B3E3A}
+.fases .mono{color:#7F7B73}
+.fases p{color:#B9B5AD;font-size:15px;line-height:1.6;margin-top:6px;max-width:48ch}
+.f-dur{display:grid;gap:10px}
+.f-dur b{font:400 15px 'IBM Plex Mono',monospace;color:#fff}
+.f-barra{height:6px;background:#2C2F2B;display:block}
+.f-barra i{display:block;height:100%;width:0;background:#7FA88C;transition:width 1.4s cubic-bezier(.16,1,.3,1) calc(var(--d,0s) + .2s)}
+.fases li.visto .f-barra i,html:not(.js) .f-barra i{width:var(--w)}
+@media (max-width:759px){.fases li{grid-template-columns:36px 1fr}.f-dur{grid-column:2}}
+.faq-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:40px clamp(40px,6vw,112px)}
+@media (prefers-reduced-motion:reduce){.s-mosaico :global(img),.s-hero h1{animation:none}.f-barra i{width:var(--w)}}
+</style>

@@ -1,0 +1,14 @@
+---
+import { faqs } from '../data';
+interface Props { items?: typeof faqs }
+const { items = faqs } = Astro.props;
+---
+<div class="faq">
+  {items.map((f, i) => (
+    <details name="faq" open={i === 0}>
+      <summary>{f.q}<span class="mas" aria-hidden="true"></span></summary>
+      <p class="resp">{f.a}</p>
+    </details>
+  ))}
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) })} />

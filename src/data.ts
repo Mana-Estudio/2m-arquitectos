@@ -122,3 +122,53 @@ export const notas = [
   { t: 'La influencia de la arquitectura rural en el diseño contemporáneo y sostenible', fecha: '12 de noviembre de 2026', url: 'https://www.2m-arquitectos.com/la-influencia-de-la-arquitectura-rural-en-el-diseno-contemporaneo-y-sostenible/' },
   { t: 'Tendencias en cocinas 2027: cómo diseñar espacios invisibles, cálidos e integrados', fecha: '5 de noviembre de 2026', url: 'https://www.2m-arquitectos.com/tendencias-en-cocinas-2027-como-disenar-espacios-invisibles-calidos-e-integrados/' },
 ];
+
+/** Enlace de WhatsApp con el mensaje ya escrito */
+export const waTexto = (txt: string) => `${WA}?text=${encodeURIComponent(txt)}`;
+
+export const navegacion = [
+  ['proyectos', 'Proyectos', '/proyectos/'], ['servicios', 'Servicios', '/servicios/'], ['estudio', 'Estudio', '/estudio/'],
+  ['blog', 'Blog', '/blog/'], ['contacto', 'Contacto', '/contacto/'],
+] as const;
+
+// MUESTRA: cifras orientativas, validar con el cliente antes de publicar
+export const cifras = [
+  { n: 20, suf: '+', t: 'años proyectando en Madrid' },
+  { n: 500, suf: '+', t: 'viviendas proyectadas' },
+  { n: 3, suf: '', t: 'comunidades con obra: Madrid, Galicia y Málaga' },
+  { n: 8, suf: '', t: 'profesionales en un solo equipo' },
+];
+
+// MUESTRA: testimonios de ejemplo, sustituir por reseñas reales
+export const testimonios = [
+  { txt: 'Nos ayudaron a entender la parcela antes de dibujar nada. La casa tiene la luz que imaginábamos y la obra terminó en plazo.', n: 'Marta y Luis', p: 'Vivienda unifamiliar · Las Lomas' },
+  { txt: 'Tener arquitecto y aparejador en el mismo estudio nos ahorró discusiones y sorpresas. Un único interlocutor de principio a fin.', n: 'Promotora residencial', p: 'Promoción de 16 viviendas · Torrelodones' },
+  { txt: 'La licencia llegó antes de lo que esperábamos. Nos explicaron cada paso y cada coste sin letra pequeña.', n: 'Javier R.', p: 'Reforma integral · Torrelodones' },
+];
+
+// MUESTRA: preguntas frecuentes, revisar redacción con el estudio
+export const faqs = [
+  { q: '¿Cuánto cuesta el proyecto de una vivienda unifamiliar?', a: 'Depende de la superficie, la complejidad y los servicios que necesites. Como referencia, los honorarios de proyecto y dirección de obra suelen moverse entre el 6 % y el 10 % del coste de construcción. Tras la primera reunión te enviamos un presupuesto cerrado.' },
+  { q: '¿Cuánto se tarda en conseguir la licencia de obra?', a: 'En los municipios del oeste de Madrid suele tardar entre 3 y 6 meses desde que se presenta el proyecto básico. Nosotros preparamos la documentación y hacemos el seguimiento con el ayuntamiento.' },
+  { q: '¿Trabajáis fuera de Madrid?', a: 'Sí. Tenemos obra en Galicia y Málaga, y estudiamos cualquier proyecto en el resto de España.' },
+  { q: '¿Me ayudáis si todavía no tengo parcela?', a: 'Sí. Podemos revisar contigo la normativa urbanística de las parcelas que estés valorando para saber qué se puede construir antes de comprar.' },
+  { q: '¿Quién dirige la obra?', a: 'Un arquitecto y un arquitecto técnico (aparejador) del propio estudio. Así el proyecto y la obra los lleva el mismo equipo.' },
+  { q: '¿La primera reunión tiene coste?', a: 'No. En la primera reunión vemos tu idea y la parcela y después te enviamos un presupuesto sin compromiso.' },
+];
+
+export const serviciosDet = [
+  { id: 'obra-nueva', t: 'Vivienda unifamiliar', foto: 'valle-de-tobalina', d: 'Diseñamos tu casa desde la parcela: orientación, luz, vistas y cómo quieres vivir. Del anteproyecto a la entrega de llaves.', incluye: ['Estudio de parcela y normativa', 'Anteproyecto e imágenes 3D', 'Proyecto básico y de ejecución', 'Dirección de obra'] },
+  { id: 'promociones', t: 'Promociones y edificios', foto: 'arroyo-del-coronel', d: 'Proyectos residenciales para promotoras y cooperativas, de 4 a más de 300 viviendas, optimizando edificabilidad y coste.', incluye: ['Estudio de viabilidad', 'Optimización de tipologías', 'Proyecto y licencia', 'Coordinación con la constructora'] },
+  { id: 'reformas', t: 'Reformas y rehabilitación', foto: 'reforma-torrelodones', d: 'Rediseñamos casas y pisos existentes: redistribución, ampliación, eficiencia energética y nuevos acabados.', incluye: ['Levantamiento del estado actual', 'Propuesta de distribución', 'Licencia o declaración responsable', 'Dirección de obra'] },
+  { id: 'licencias', t: 'Licencias de actividad', foto: 'velez-malaga', d: 'Tramitamos licencias de apertura y funcionamiento para locales, oficinas, restauración y hoteles.', incluye: ['Proyecto de actividad', 'Adecuación a normativa', 'Tramitación municipal', 'Certificado final'] },
+];
+
+/** Tipos para el presupuesto guiado. eur = coste orientativo de construcción €/m² (MUESTRA) */
+export const tiposPresu = [
+  { id: 'vivienda', t: 'Vivienda unifamiliar', foto: 'torrelodones', eur: [1400, 2200], m2: 250 },
+  { id: 'promocion', t: 'Promoción de viviendas', foto: 'navallera', eur: [1100, 1600], m2: 1500 },
+  { id: 'reforma', t: 'Reforma de casa o piso', foto: 'reforma-torrelodones', eur: [600, 1200], m2: 120 },
+  { id: 'terciario', t: 'Local, oficina o licencia', foto: 'velez-malaga', eur: [500, 1100], m2: 200 },
+];
+
+export const colaboradores = ['Spacio4', 'ZOE Gescop', 'Reformas4'];

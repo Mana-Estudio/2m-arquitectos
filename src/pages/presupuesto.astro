@@ -1,0 +1,264 @@
+---
+import Base from '../layouts/Base.astro';
+import Foto from '../components/Foto.astro';
+import Flecha from '../components/Flecha.astro';
+import { tiposPresu, fotos, TEL, TEL_HREF, WA } from '../data';
+const servicios = ['Diseño y anteproyecto', 'Proyecto básico y de ejecución', 'Licencia de obra', 'Dirección de obra', 'Imágenes 3D', 'Estudio de parcela'];
+const plazos = ['Cuanto antes', 'En 3–6 meses', 'En más de 6 meses', 'Solo me estoy informando'];
+---
+<Base title="Calcula tu presupuesto de arquitectura · 2M Arquitectos" activo="presupuesto"
+  description="Calcula en un minuto el coste orientativo de tu vivienda, reforma o promoción y recibe un presupuesto sin compromiso de 2M Arquitectos.">
+  <div class="pres">
+    <aside class="p-lat" aria-label="Resumen">
+      <div class="p-fotos" aria-hidden="true">
+        {tiposPresu.map((t, i) => <div class:list={['pf', { activa: i === 0 }]} data-id={t.id}><Foto src={fotos(t.foto)[0]} alt="" sizes="(min-width: 960px) 40vw, 100vw" class="no-revela" prioridad={i === 0} /></div>)}
+      </div>
+      <div class="p-res">
+        <span class="ojo ojo-c">Tu estimación</span>
+        <output class="p-cifra">—</output>
+        <dl class="p-resumen"></dl>
+        <p class="p-nota">Coste de construcción orientativo, sin IVA ni honorarios. El presupuesto definitivo te lo enviamos tras la primera reunión.</p>
+      </div>
+    </aside>
+
+    <div class="p-main">
+      <div class="p-top">
+        <span class="mono p-paso">Paso 1 de 5</span>
+        <div class="p-barra"><i></i></div>
+      </div>
+
+      <form class="wiz" novalidate data-wa={WA}>
+        <fieldset class="paso activo" data-n="1">
+          <legend><h1 class="p-h">¿Qué quieres construir?</h1></legend>
+          <div class="tarj-tipo">
+            {tiposPresu.map((t) => (
+              <label>
+                <input type="radio" name="tipo" value={t.id} data-t={t.t} required />
+                <span class="tt"><Foto src={fotos(t.foto)[0]} alt="" sizes="200px" class="no-revela" /><b>{t.t}</b><i aria-hidden="true">✓</i></span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="paso" data-n="2">
+          <legend><h2 class="p-h">¿Cuántos metros aproximados?</h2></legend>
+          <label class="m2-gran"><output class="m2-o">250</output><span>m² construidos</span></label>
+          <input type="range" name="m2" min="40" max="3000" step="10" value="250" aria-label="Superficie construida en m²" />
+          <div class="m2-ref mono"><span>40</span><span>3.000 m²</span></div>
+          <div class="sino">
+            <p>¿Tienes ya la parcela o el inmueble?</p>
+            <div class="seg2">{['Sí', 'Estoy buscando', 'No aplica'].map((v, i) => <label><input type="radio" name="parcela" value={v} checked={i === 0} /><span>{v}</span></label>)}</div>
+          </div>
+          <label class="campo">Municipio o zona<input name="zona" placeholder="Ej.: Boadilla del Monte" autocomplete="address-level2" /></label>
+        </fieldset>
+
+        <fieldset class="paso" data-n="3">
+          <legend><h2 class="p-h">¿Qué necesitas de nosotros?</h2></legend>
+          <p class="muted" style="margin-bottom:20px">Marca todo lo que aplique. Si no lo tienes claro, te lo explicamos en la reunión.</p>
+          <div class="checks">{servicios.map((s, i) => <label><input type="checkbox" name="servicios" value={s} checked={i < 2} /><span>{s}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset class="paso" data-n="4">
+          <legend><h2 class="p-h">¿Cuándo te gustaría empezar?</h2></legend>
+          <div class="checks una">{plazos.map((s) => <label><input type="radio" name="plazo" value={s} required /><span>{s}</span></label>)}</div>
+        </fieldset>
+
+        <fieldset class="paso" data-n="5">
+          <legend><h2 class="p-h">¿A quién enviamos el presupuesto?</h2></legend>
+          <div class="campos">
+            <label class="campo">Nombre<input name="nombre" required autocomplete="name" /></label>
+            <label class="campo">Teléfono<input name="telefono" type="tel" required autocomplete="tel" inputmode="tel" /></label>
+            <label class="campo full">Email (opcional)<input name="email" type="email" autocomplete="email" /></label>
+            <label class="campo full">¿Algo más que debamos saber?<textarea name="mensaje" rows="3" placeholder="Estilo, número de dormitorios, piscina, presupuesto máximo…"></textarea></label>
+            <label class="full check"><input type="checkbox" name="priv" required /><span>Acepto la <a href="https://www.2m-arquitectos.com/politica-de-privacidad/">política de privacidad</a>.</span></label>
+          </div>
+        </fieldset>
+
+        <div class="p-hecho" hidden role="status">
+          <span class="ok-ic" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6" /></svg></span>
+          <h2 class="p-h">¡Listo! Te hemos abierto WhatsApp</h2>
+          <p class="lead">El mensaje con tu solicitud ya está escrito: solo tienes que pulsar enviar. Te respondemos en menos de 24 horas laborables.</p>
+          <div class="fila"><a class="btn btn-v p-reabrir" href="#" rel="noopener">Abrir WhatsApp de nuevo</a><a class="btn btn-l" href={TEL_HREF}>Llamar al {TEL}</a></div>
+          <a href="/proyectos/" class="link">Mientras tanto, mira nuestros proyectos <Flecha /></a>
+        </div>
+
+        <p class="p-error" role="alert"></p>
+        <div class="p-nav">
+          <button type="button" class="btn btn-l p-atras" hidden><Flecha dir="izq" /> Atrás</button>
+          <button type="button" class="btn btn-v btn-f p-sig">Siguiente <Flecha /></button>
+          <button type="submit" class="btn btn-v btn-f p-env" hidden>Enviar por WhatsApp <Flecha /></button>
+        </div>
+      </form>
+      <p class="p-alt muted">¿Prefieres hablar? Llámanos al <a href={TEL_HREF}>{TEL}</a></p>
+    </div>
+  </div>
+  <script type="application/json" id="tipos" set:html={JSON.stringify(tiposPresu.map(({ id, t, eur, m2 }) => ({ id, t, eur, m2 })))} />
+</Base>
+
+<style>
+.pres{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:calc(100svh - 72px)}
+.p-lat{position:sticky;top:0;height:100svh;background:var(--osc);color:#F1EEE8;overflow:hidden;display:grid;align-content:end}
+.p-fotos{position:absolute;inset:0}
+.pf{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}.pf.activa{opacity:.55}
+.pf :global(.foto){height:100%}
+.p-lat::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--osc) 15%,rgba(29,31,28,.2))}
+.p-res{position:relative;z-index:1;padding:var(--pad);display:grid;gap:18px}
+.p-cifra{font:300 clamp(34px,3.6vw,56px)/1.02 var(--titulo);letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums}
+.p-resumen{display:grid;gap:0;font-size:14px}
+.p-resumen :global(div){display:grid;grid-template-columns:96px 1fr;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.14);animation:aparece .5s cubic-bezier(.16,1,.3,1)}
+.p-resumen :global(dt){color:#9C988F}.p-resumen :global(dd){margin:0}
+@keyframes aparece{from{opacity:0;transform:translateX(-8px)}}
+.p-nota{font-size:13px;line-height:1.5;color:#9C988F;max-width:44ch}
+.p-main{padding:clamp(32px,5vw,80px) var(--pad);display:grid;align-content:start;gap:28px;max-width:860px}
+.p-top{display:grid;gap:12px}
+.p-barra{height:2px;background:var(--linea)}.p-barra i{display:block;height:100%;width:20%;background:var(--verde);transition:width .6s cubic-bezier(.16,1,.3,1)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0;margin-bottom:28px}
+.p-h{font:300 clamp(32px,3.8vw,56px)/1.05 var(--titulo);letter-spacing:-.03em;text-wrap:balance}
+.paso{display:none}
+.paso.activo{display:block;animation:entra .6s cubic-bezier(.16,1,.3,1)}
+.paso.atras{animation-name:entra-izq}
+@keyframes entra{from{opacity:0;transform:translateX(32px)}}
+@keyframes entra-izq{from{opacity:0;transform:translateX(-32px)}}
+.tarj-tipo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+.tarj-tipo label,.seg2 label,.checks label{position:relative;cursor:pointer}
+.tarj-tipo input,.seg2 input,.checks input{position:absolute;opacity:0;pointer-events:none}
+.tt{display:grid;grid-template-rows:auto auto;border:1px solid var(--linea);background:#fff;transition:border-color .25s,transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s}
+.tt :global(.foto){aspect-ratio:16/10}
+.tt :global(img){filter:grayscale(.6);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
+.tt b{font:400 19px/1.25 var(--titulo);padding:16px 18px}
+.tt i{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--verde);color:#fff;font-style:normal;display:grid;place-items:center;transform:scale(0);transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.tarj-tipo label:hover .tt{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(27,29,28,.4)}
+.tarj-tipo label:hover :global(img),.tarj-tipo input:checked+.tt :global(img){filter:none;transform:scale(1.04)}
+.tarj-tipo input:checked+.tt{border-color:var(--verde);box-shadow:0 0 0 1px var(--verde)}
+.tarj-tipo input:checked+.tt i{transform:scale(1)}
+input:focus-visible+span{outline:2px solid var(--verde);outline-offset:3px}
+.m2-gran{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.m2-o{font:300 clamp(72px,9vw,140px)/.9 var(--titulo);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.m2-gran span{font-size:18px;color:var(--suave)}
+input[type=range]{width:100%;accent-color:var(--verde);height:32px}
+.m2-ref{display:flex;justify-content:space-between;margin-bottom:36px}
+.sino p{font-size:16px;margin-bottom:12px}
+.seg2,.checks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.seg2 span,.checks span{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:1px solid var(--linea);border-radius:24px;background:#fff;font-size:15px;transition:background-color .2s,color .2s,border-color .2s}
+.checks span::before{content:'';width:14px;height:14px;border:1px solid currentColor;border-radius:3px;transition:background-color .2s}
+.checks input[type=radio]+span::before{border-radius:50%}
+.checks input:checked+span::before{background:#fff;box-shadow:inset 0 0 0 3px var(--texto)}
+.seg2 label:hover span,.checks label:hover span{border-color:var(--texto)}
+.seg2 input:checked+span,.checks input:checked+span{background:var(--texto);color:#fff;border-color:var(--texto)}
+.checks.una{display:grid;max-width:480px}
+.checks.una span{border-radius:0;min-height:60px;font-size:17px}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px 16px}
+.campo{display:grid;gap:8px;font-size:15px}
+.full{grid-column:1/-1}
+.campo input,.campo textarea{height:56px;padding:0 16px;border:1px solid #8C877E;background:#fff;font:400 17px 'IBM Plex Sans',sans-serif;color:var(--texto);border-radius:0;transition:border-color .2s,box-shadow .2s}
+.campo textarea{height:auto;padding:14px 16px;resize:vertical}
+.campo input:focus,.campo textarea:focus{outline:none;border-color:var(--verde);box-shadow:0 0 0 3px rgba(62,107,79,.18)}
+.campo input.mal{border-color:#A3402F}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5}
+.check input{width:22px;height:22px;margin:0;accent-color:var(--verde)}
+.p-error{color:#A3402F;font-size:15px;min-height:1.4em}
+.p-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--linea)}
+.p-nav .btn{gap:12px}
+.p-sig,.p-env{margin-left:auto}
+.p-nav[hidden],.p-top[hidden],.p-nav [hidden]{display:none}
+.p-hecho{display:grid;gap:20px;justify-items:start;animation:entra .6s cubic-bezier(.16,1,.3,1)}
+.p-hecho[hidden]{display:none}
+.ok-ic{width:64px;height:64px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0)}}
+.p-alt{font-size:15px}
+@media (max-width:959px){
+  .pres{grid-template-columns:1fr}
+  .p-lat{position:relative;height:auto;min-height:220px;order:2}
+  .p-main{order:1}
+}
+@media (prefers-reduced-motion:reduce){.paso.activo,.p-hecho,.ok-ic,.p-resumen :global(div){animation:none}}
+</style>
+
+<script>
+  type Tipo = { id: string; t: string; eur: number[]; m2: number };
+  const tipos: Tipo[] = JSON.parse(document.getElementById('tipos')!.textContent!);
+  const f = document.querySelector<HTMLFormElement>('.wiz')!;
+  const pasos = [...f.querySelectorAll<HTMLElement>('.paso')];
+  const atras = f.querySelector<HTMLButtonElement>('.p-atras')!, sig = f.querySelector<HTMLButtonElement>('.p-sig')!, env = f.querySelector<HTMLButtonElement>('.p-env')!;
+  const err = f.querySelector<HTMLElement>('.p-error')!;
+  const rango = f.querySelector<HTMLInputElement>('[name=m2]')!;
+  let n = 0;
+
+  const val = (k: string) => (f.querySelector(`[name=${k}]:checked`) as HTMLInputElement | null)?.value ?? '';
+  const tipo = () => tipos.find((t) => t.id === val('tipo'));
+  const eur = (v: number) => (Math.round(v / 5000) * 5000).toLocaleString('es-ES') + ' €';
+
+  const resumen = () => {
+    const t = tipo(), d = new FormData(f);
+    const m = +rango.value;
+    f.querySelector('.m2-o')!.textContent = m.toLocaleString('es-ES');
+    document.querySelector('.p-cifra')!.textContent = t ? `${eur(m * t.eur[0])} – ${eur(m * t.eur[1])}` : 'Elige un tipo de proyecto';
+    const filas: [string, string][] = [];
+    if (t) filas.push(['Proyecto', t.t]);
+    if (n >= 1 && t) filas.push(['Superficie', `${m.toLocaleString('es-ES')} m²`]);
+    if (n >= 1 && d.get('zona')) filas.push(['Zona', String(d.get('zona'))]);
+    if (n >= 2) filas.push(['Servicios', d.getAll('servicios').join(', ') || '—']);
+    if (n >= 3 && val('plazo')) filas.push(['Plazo', val('plazo')]);
+    const dl = document.querySelector('.p-resumen')!;
+    const html = filas.map(([a, b]) => `<div><dt>${a}</dt><dd>${b.replace(/</g, '&lt;')}</dd></div>`).join('');
+    if (dl.innerHTML !== html) dl.innerHTML = html;
+    document.querySelectorAll<HTMLElement>('.pf').forEach((p) => p.classList.toggle('activa', p.dataset.id === (t?.id ?? tipos[0].id)));
+  };
+
+  const mostrar = (i: number, haciaAtras = false) => {
+    n = i;
+    pasos.forEach((p, j) => { p.classList.toggle('activo', j === n); p.classList.toggle('atras', haciaAtras); });
+    atras.hidden = n === 0; sig.hidden = n === pasos.length - 1; env.hidden = n !== pasos.length - 1;
+    document.querySelector('.p-paso')!.textContent = `Paso ${n + 1} de ${pasos.length}`;
+    (document.querySelector('.p-barra i') as HTMLElement).style.width = `${((n + 1) / pasos.length) * 100}%`;
+    err.textContent = '';
+    resumen();
+    if (i > 0) f.closest('.p-main')!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const valido = () => {
+    const p = pasos[n];
+    if (n === 0 && !val('tipo')) return 'Elige un tipo de proyecto para continuar.';
+    if (n === 3 && !val('plazo')) return 'Elige cuándo te gustaría empezar.';
+    if (n === 4) {
+      let msg = '';
+      p.querySelectorAll<HTMLInputElement>('input[required]').forEach((el) => { const ok = el.type === 'checkbox' ? el.checked : el.value.trim().length > 1; el.classList.toggle('mal', !ok); if (!ok && !msg) msg = el.type === 'checkbox' ? 'Necesitamos que aceptes la política de privacidad.' : 'Completa tu nombre y teléfono.'; });
+      return msg;
+    }
+    return '';
+  };
+
+  sig.addEventListener('click', () => { const e = valido(); if (e) { err.textContent = e; return; } mostrar(n + 1); });
+  atras.addEventListener('click', () => mostrar(n - 1, true));
+  // Elegir tipo avanza solo y ajusta los m² típicos
+  f.querySelectorAll<HTMLInputElement>('[name=tipo]').forEach((r) => r.addEventListener('change', () => { rango.value = String(tipo()!.m2); resumen(); setTimeout(() => mostrar(1), 350); }));
+  f.querySelectorAll<HTMLInputElement>('[name=plazo]').forEach((r) => r.addEventListener('change', () => setTimeout(() => mostrar(4), 300)));
+  f.addEventListener('input', resumen);
+
+  f.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const msg = valido(); if (msg) { err.textContent = msg; return; }
+    const d = new FormData(f), t = tipo()!, m = +rango.value;
+    const texto = [
+      'Hola, 2M Arquitectos. Quiero pedir presupuesto:', '',
+      `• Proyecto: ${t.t}`, `• Superficie: ${m} m²`, `• Parcela/inmueble: ${d.get('parcela')}`,
+      d.get('zona') ? `• Zona: ${d.get('zona')}` : '', `• Servicios: ${d.getAll('servicios').join(', ') || 'A definir'}`,
+      `• Plazo: ${d.get('plazo')}`, `• Estimación web: ${eur(m * t.eur[0])} – ${eur(m * t.eur[1])}`, '',
+      `Nombre: ${d.get('nombre')}`, `Teléfono: ${d.get('telefono')}`, d.get('email') ? `Email: ${d.get('email')}` : '',
+      d.get('mensaje') ? `\n${d.get('mensaje')}` : '',
+    ].filter((l) => l !== '').join('\n');
+    const url = `${f.dataset.wa}?text=${encodeURIComponent(texto)}`;
+    window.open(url, '_blank', 'noopener');
+    pasos.forEach((p) => p.classList.remove('activo'));
+    f.querySelector<HTMLAnchorElement>('.p-reabrir')!.href = url;
+    (f.querySelector('.p-hecho') as HTMLElement).hidden = false;
+    f.querySelector<HTMLElement>('.p-nav')!.hidden = true;
+    document.querySelector('.p-top')!.setAttribute('hidden', '');
+  });
+
+  // Viene con ?tipo= desde la home o servicios
+  const pre = new URLSearchParams(location.search);
+  const r = pre.get('tipo') && f.querySelector<HTMLInputElement>(`[name=tipo][value="${pre.get('tipo')}"]`);
+  if (r) { r.checked = true; rango.value = pre.get('m2') ?? String(tipo()!.m2); mostrar(1); } else mostrar(0);
+</script>

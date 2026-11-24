@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Foto from '../components/Foto.astro';
 import Flecha from '../components/Flecha.astro';
+import Cta from '../components/Cta.astro';
 import { notas, fotos } from '../data';
 const imgs = fotos('blog');
 const [destacada, ...resto] = notas;
@@ -28,6 +29,7 @@ const [destacada, ...resto] = notas;
       ))}
     </div>
   </div>
+  <Cta titulo="¿Lo hablamos para tu casa?" foto="torrelodones" />
 </Base>
 
 <style>

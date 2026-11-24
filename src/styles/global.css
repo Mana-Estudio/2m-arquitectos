@@ -74,3 +74,53 @@ a{text-underline-offset:4px;text-decoration-thickness:1px}
   .cab,.cab.oculta{transition:none;transform:none}
   .cookies:not([hidden]){animation:none}
 }
+/* ===== Microinteracciones y piezas compartidas ===== */
+.js [data-revela].revela{opacity:0;transform:translateY(24px)}
+.js [data-revela].revela.visto{opacity:1;transform:none;transition:opacity .9s ease var(--d,0s),transform 1s cubic-bezier(.16,1,.3,1) var(--d,0s)}
+.magnet{transition:translate .35s cubic-bezier(.16,1,.3,1),background-color .25s ease,color .25s ease}
+.ojo{display:inline-flex;align-items:center;gap:10px;font:400 13px/1 'IBM Plex Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--suave)}
+.ojo::before{content:'';width:24px;height:1px;background:currentColor}
+.ojo-c{color:#B9B5AD}
+.btn-f{position:relative;overflow:hidden;isolation:isolate;gap:12px}
+.btn-f::before{content:'';position:absolute;inset:0;background:var(--verde-osc);transform:scaleY(0);transform-origin:bottom;transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:-1}
+.btn-f:hover::before{transform:scaleY(1)}
+.btn-v.btn-f:hover{background:var(--verde)}
+/* FAQ */
+.faq{border-top:1px solid var(--texto)}
+.faq details{border-bottom:1px solid var(--linea)}
+.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;cursor:pointer;font:400 clamp(19px,1.6vw,23px)/1.3 var(--titulo);letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--verde)}
+.faq .mas{flex:none;width:36px;height:36px;border:1px solid var(--linea);border-radius:50%;position:relative;transition:transform .4s cubic-bezier(.16,1,.3,1),background-color .25s,border-color .25s}
+.faq .mas::before,.faq .mas::after{content:'';position:absolute;left:50%;top:50%;width:12px;height:1px;background:currentColor;translate:-50% -50%}
+.faq .mas::after{rotate:90deg;transition:rotate .4s cubic-bezier(.16,1,.3,1)}
+.faq details[open] .mas{background:var(--texto);color:#fff;border-color:var(--texto)}
+.faq details[open] .mas::after{rotate:0deg}
+.faq .resp{padding:0 0 28px;font-size:17px;line-height:1.7;color:var(--cuerpo);max-width:68ch}
+.faq details::details-content{block-size:0;overflow:hidden;transition:block-size .45s cubic-bezier(.16,1,.3,1),content-visibility .45s allow-discrete}
+.faq details[open]::details-content{block-size:auto}
+:root{interpolate-size:allow-keywords}
+/* cifras */
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));border-top:1px solid currentColor}
+.cifras>div{padding:28px 24px 8px 0;display:grid;gap:10px;align-content:start}
+.cifras b{font:300 clamp(56px,6vw,96px)/.9 var(--titulo);letter-spacing:-.04em;display:flex;align-items:baseline}
+.cifras b small{font-size:.45em;color:var(--verde);margin-left:4px}
+.cifras span{font-size:15px;line-height:1.5;max-width:22ch;opacity:.8}
+/* testimonios */
+.testi{display:grid;gap:32px}
+.testi-pista{display:grid;grid-auto-flow:column;grid-auto-columns:min(100%,640px);gap:clamp(20px,3vw,48px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}
+.testi-pista::-webkit-scrollbar{display:none}
+.testi blockquote{margin:0;scroll-snap-align:start;display:grid;gap:28px;align-content:space-between;border-top:1px solid var(--texto);padding-top:28px}
+.testi blockquote p{font:300 clamp(24px,2.4vw,34px)/1.3 var(--titulo);letter-spacing:-.02em;text-wrap:pretty}
+.testi blockquote p::before{content:'“';color:var(--verde)}
+.testi footer{display:flex;align-items:center;gap:14px;font-size:15px}
+.testi .ini{width:44px;height:44px;border-radius:50%;background:var(--piedra);display:grid;place-items:center;font:500 14px var(--titulo)}
+.flechas{display:flex;gap:8px}
+.flechas button{width:52px;height:52px;border-radius:50%;border:1px solid var(--linea);background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--texto);transition:background-color .25s,color .25s,border-color .25s}
+.flechas button:hover{background:var(--texto);color:#fff;border-color:var(--texto)}
+/* marquesina */
+.marq{overflow:hidden;white-space:nowrap;border-block:1px solid var(--linea);padding:20px 0}
+.marq-in{display:inline-flex;gap:56px;animation:marq 40s linear infinite;font:300 clamp(28px,3.4vw,48px)/1 var(--titulo);letter-spacing:-.02em}
+.marq-in span{display:inline-flex;align-items:center;gap:56px}.marq-in span::after{content:'';width:10px;height:10px;background:var(--verde)}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marq-in{animation:none}.js [data-revela].revela{opacity:1;transform:none}.pulso{animation:none}}
