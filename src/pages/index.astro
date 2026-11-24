@@ -3,7 +3,8 @@ import Base from '../layouts/Base.astro';
 import Foto from '../components/Foto.astro';
 import Tarjeta from '../components/Tarjeta.astro';
 import Cta from '../components/Cta.astro';
-import { proyectos, servicios, pasos, equipo, fotos } from '../data';
+import Flecha from '../components/Flecha.astro';
+import { destacados, servicios, pasos, equipo, fotos } from '../data';
 ---
 <Base title="Estudio de arquitectura en Madrid · 2M Arquitectos" activo="inicio"
   description="Estudio de arquitectura en Boadilla del Monte, Madrid. Diseñamos y dirigimos viviendas unifamiliares, promociones y edificios. Pide presupuesto sin compromiso.">
@@ -11,19 +12,18 @@ import { proyectos, servicios, pasos, equipo, fotos } from '../data';
     <Foto src={fotos('las-lomas-hills-6')[0]} alt="Las Lomas Hills 6 en Boadilla del Monte: vivienda blanca con piscina" sizes="100vw" prioridad class="hero-foto" />
     <div class="hero-velo" aria-hidden="true"></div>
     <div class="wrap hero-txt">
-      <p class="hero-sup">Boadilla del Monte · Proyectos en Madrid, Galicia y Málaga</p>
       <h1 id="h1">Estudio de arquitectura en Madrid</h1>
       <div class="hero-pie">
-        <p>Diseñamos y dirigimos viviendas unifamiliares, promociones y edificios. Un solo equipo de arquitectos, arquitectos técnicos e ingenieros, de la idea a la obra.</p>
+        <p>Desde Boadilla del Monte diseñamos y dirigimos viviendas unifamiliares, promociones y edificios en Madrid, Galicia y Málaga. Un solo equipo de arquitectos, arquitectos técnicos e ingenieros, de la idea a la obra.</p>
         <div class="fila"><a href="/contacto/" class="btn btn-v">Pedir presupuesto</a><a href="/proyectos/" class="btn btn-c">Ver proyectos</a></div>
       </div>
     </div>
   </section>
 
   <section class="wrap sec" aria-labelledby="h-proy">
-    <div class="cab-sec"><h2 id="h-proy" class="h2">Proyectos destacados</h2><a href="/proyectos/" class="link">Ver todos los proyectos →</a></div>
+    <div class="cab-sec"><h2 id="h-proy" class="h2">Proyectos destacados</h2><a href="/proyectos/" class="link">Ver todos los proyectos <Flecha /></a></div>
     <div class="grilla" style="--min:520px;--ar:3/2">
-      {proyectos.map((p) => <Tarjeta p={p} sizes="(min-width: 1100px) 50vw, 100vw" />)}
+      {destacados.map((p) => <Tarjeta p={p} sizes="(min-width: 1100px) 50vw, 100vw" />)}
     </div>
   </section>
 
@@ -31,7 +31,7 @@ import { proyectos, servicios, pasos, equipo, fotos } from '../data';
     <div class="wrap sec">
       <div class="grid-intro"><h2 id="h-serv" class="h2">Servicios</h2><p class="lead">Te acompañamos en todo el proceso con un único interlocutor. Sin intermediarios entre el diseño y la obra.</p></div>
       <div class="cols">
-        {servicios.map((s, i) => <div class="serv"><span class="mono">0{i + 1}</span><h3 class="h3">{s.t}</h3><p>{s.d}</p></div>)}
+        {servicios.map((s) => <div class="serv"><h3 class="h3">{s.t}</h3><p>{s.d}</p></div>)}
       </div>
     </div>
   </section>
@@ -55,7 +55,7 @@ import { proyectos, servicios, pasos, equipo, fotos } from '../data';
         <h2 id="h-eq" class="h2">Un equipo completo</h2>
         <p class="lead">Arquitectos, arquitectos técnicos e ingenieros en el mismo estudio. Así el proyecto y la obra hablan el mismo idioma.</p>
         <ul class="lista">{equipo.map(([n, c]) => <li><span>{n}</span><span>{c}</span></li>)}</ul>
-        <a href="/estudio/" class="link">Conoce el estudio →</a>
+        <a href="/estudio/" class="link">Conoce el estudio <Flecha /></a>
       </div>
     </div>
   </section>
@@ -66,10 +66,15 @@ import { proyectos, servicios, pasos, equipo, fotos } from '../data';
 <style>
 .hero{position:relative;height:clamp(600px,60vw,880px);max-height:calc(100svh - 72px);min-height:560px;background:#363935;overflow:hidden}
 .hero :global(.hero-foto){position:absolute;inset:0}
+.hero :global(.hero-foto img){animation:revela 1.6s cubic-bezier(.16,1,.3,1) both}
+.hero-txt>*{animation:sube .9s .25s cubic-bezier(.16,1,.3,1) both}
+.hero-txt>*:nth-child(2){animation-delay:.4s}
+@keyframes revela{from{transform:scale(1.06);filter:saturate(.85)}}
+@keyframes sube{from{opacity:0;transform:translateY(16px)}}
+@media (prefers-reduced-motion:reduce){.hero :global(.hero-foto img),.hero-txt>*{animation:none}}
 .hero-velo{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,22,20,.8) 0%,rgba(20,22,20,.4) 45%,rgba(20,22,20,.05) 75%)}
 .hero-txt{position:absolute;left:0;right:0;bottom:0;padding-bottom:clamp(32px,5vw,72px);display:grid;gap:24px}
-.hero-sup{font-size:15px;color:#E9E6E0}
-.hero h1{font:300 clamp(44px,7.4vw,112px)/.98 var(--titulo);letter-spacing:-.035em;color:#fff;max-width:12ch;text-wrap:balance}
+.hero h1{font:300 clamp(44px,6.6vw,96px)/.98 var(--titulo);letter-spacing:-.035em;color:#fff;max-width:12ch;text-wrap:balance}
 .hero-pie{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:28px}
 .hero-pie p{font-size:clamp(17px,1.4vw,19px);line-height:1.55;color:#F2EFE9;max-width:46ch}
 .eq{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:48px clamp(32px,5vw,96px);align-items:start}

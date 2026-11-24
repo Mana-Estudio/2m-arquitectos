@@ -57,7 +57,45 @@ export const proyectos: Proyecto[] = [
     tipologia: 'Promoción de viviendas adosadas y pareadas',
     descripcion: ['Treinta y una viviendas unifamiliares adosadas y pareadas en Vélez-Málaga.'],
   },
+  {
+    slug: 'valle-de-tobalina', nombre: 'Vivienda en Valle de Tobalina', lugar: 'Las Lomas, Boadilla del Monte', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Vivienda unifamiliar aislada',
+    descripcion: ['Vivienda unifamiliar aislada de lujo con piscina en la urbanización de Las Lomas, en Boadilla del Monte.'],
+  },
+  {
+    slug: 'valle-de-cares', nombre: 'Vivienda en Valle de Cares', lugar: 'Las Lomas, Boadilla del Monte', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Vivienda unifamiliar aislada',
+    descripcion: ['Vivienda unifamiliar aislada con piscina en la urbanización de Las Lomas, en Boadilla del Monte.'],
+  },
+  {
+    slug: 'boadilla-7-viviendas', nombre: '7 viviendas aisladas con piscina', lugar: 'Boadilla del Monte, Madrid', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Promoción de viviendas unifamiliares aisladas',
+    descripcion: ['Siete viviendas unifamiliares aisladas con piscina en Boadilla del Monte.'],
+  },
+  {
+    slug: 'valdemoro', nombre: '14 viviendas unifamiliares', lugar: 'Valdemoro, Madrid', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Promoción de viviendas unifamiliares',
+    descripcion: ['Catorce viviendas unifamiliares en Valdemoro.'],
+  },
+  {
+    slug: 'navallera', nombre: '16 viviendas unifamiliares', lugar: 'Torrelodones, Madrid', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Promoción de viviendas unifamiliares',
+    descripcion: ['Dieciséis viviendas unifamiliares en la calle Navallera, en Torrelodones.'],
+  },
+  {
+    slug: 'arroyo-del-coronel', nombre: '30 viviendas unifamiliares', lugar: 'Torrelodones, Madrid', zona: 'Madrid', tipo: 'Viviendas',
+    tipologia: 'Promoción de viviendas unifamiliares',
+    descripcion: ['Treinta viviendas unifamiliares en la calle Arroyo del Coronel, en Torrelodones.'],
+  },
+  {
+    slug: 'reforma-torrelodones', nombre: 'Reforma de vivienda con piscina', lugar: 'Torrelodones, Madrid', zona: 'Madrid', tipo: 'Reformas',
+    tipologia: 'Reforma de vivienda unifamiliar',
+    descripcion: ['Reforma de una vivienda unifamiliar con piscina en Torrelodones.'],
+  },
 ];
+
+export const destacados = ['las-lomas-hills-6', 'valle-de-tobalina', 'majadahonda', 'torrelodones', 'sanxenxo', 'velez-malaga']
+  .map((s) => proyectos.find((p) => p.slug === s)!);
 
 export const servicios = [
   { t: 'Desarrollo integral', d: 'Nos ocupamos del proyecto completo, desde la primera idea hasta la entrega de llaves.' },

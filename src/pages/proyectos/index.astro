@@ -2,8 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import Tarjeta from '../../components/Tarjeta.astro';
 import { proyectos } from '../../data';
-const tipos = ['Todos', 'Viviendas', 'Edificios', 'Terciario', 'Reformas'];
-const zonas = ['Todas', 'Madrid', 'Galicia', 'Málaga'];
+const unicos = (k: 'tipo' | 'zona', orden: string[]) => orden.filter((v) => proyectos.some((p) => p[k] === v));
+const tipos = ['Todos', ...unicos('tipo', ['Viviendas', 'Edificios', 'Terciario', 'Reformas'])];
+const zonas = ['Todas', ...unicos('zona', ['Madrid', 'Galicia', 'Málaga'])];
 ---
 <Base title="Proyectos de arquitectura en Madrid · 2M Arquitectos" activo="proyectos"
   description="Viviendas unifamiliares, promociones, edificios y terciario en Madrid, Galicia y Málaga. Conoce los proyectos de 2M Arquitectos.">

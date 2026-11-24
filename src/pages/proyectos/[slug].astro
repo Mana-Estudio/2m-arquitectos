@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Foto from '../../components/Foto.astro';
 import Tarjeta from '../../components/Tarjeta.astro';
 import Cta from '../../components/Cta.astro';
+import Flecha from '../../components/Flecha.astro';
 import { proyectos, fotos, WA, TEL, type Proyecto } from '../../data';
 
 export function getStaticPaths() {
@@ -60,16 +61,16 @@ const relacionados = proyectos.filter((x) => x.slug !== p.slug).slice(0, 3);
   </section>
 
   <section class="wrap" aria-labelledby="h-rel" style="padding-bottom:clamp(72px,8vw,120px)">
-    <div class="cab-sec"><h2 id="h-rel" class="h2s">Proyectos relacionados</h2><a href="/proyectos/" class="link">Ver todos →</a></div>
+    <div class="cab-sec"><h2 id="h-rel" class="h2s">Proyectos relacionados</h2><a href="/proyectos/" class="link">Ver todos <Flecha /></a></div>
     <div class="grilla" style="--min:340px">{relacionados.map((r) => <Tarjeta p={r} />)}</div>
   </section>
 
   <Cta titulo="Cuéntanos tu proyecto" />
 
   <dialog class="lb" aria-label="Galería a pantalla completa" data-src={JSON.stringify(grandes.map((g) => g.src))} data-alt={corto}>
-    <div class="lb-top"><span class="lb-n mono"></span><button type="button" class="lb-x">Cerrar ×</button></div>
+    <div class="lb-top"><span class="lb-n mono"></span><button type="button" class="lb-x">Cerrar <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.25"/></svg></button></div>
     <img class="lb-img" alt="" />
-    <div class="lb-pie"><button type="button" class="lb-ant" aria-label="Imagen anterior">←</button><button type="button" class="lb-sig" aria-label="Imagen siguiente">→</button></div>
+    <div class="lb-pie"><button type="button" class="lb-ant" aria-label="Imagen anterior"><Flecha dir="izq" /></button><button type="button" class="lb-sig" aria-label="Imagen siguiente"><Flecha /></button></div>
   </dialog>
 </Base>
 
@@ -86,7 +87,7 @@ dt{font-size:15px;color:var(--suave)}dd{font-size:16px}
 .lb[open]{display:grid;grid-template-rows:auto 1fr auto}
 .lb-top,.lb-pie{display:flex;justify-content:space-between;align-items:center;padding:12px clamp(12px,3vw,32px)}
 .lb-n{color:#C9C5BD}
-.lb button{min-width:52px;height:48px;padding:0 16px;border:1px solid #5A5D58;background:transparent;color:#F7F5F1;font:400 16px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.lb button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:52px;height:48px;padding:0 16px;border:1px solid #5A5D58;background:transparent;color:#F7F5F1;font:400 16px 'IBM Plex Sans',sans-serif;cursor:pointer}
 .lb-img{width:100%;height:100%;object-fit:contain;min-height:0}
 </style>
 <script>

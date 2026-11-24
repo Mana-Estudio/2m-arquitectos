@@ -21,7 +21,7 @@ const servicios = ['Desarrollo integral de proyectos de arquitectura', 'Proyecto
   <section style="background:var(--piedra)" aria-labelledby="h-serv">
     <div class="wrap sec serv-in">
       <h2 id="h-serv" class="h2">Servicios</h2>
-      <ol class="serv-l">{servicios.map((t, i) => <li><span class="mono">0{i + 1}</span><span>{t}</span></li>)}</ol>
+      <ol class="serv-l">{servicios.map((t) => <li>{t}</li>)}</ol>
     </div>
   </section>
 
@@ -34,5 +34,5 @@ const servicios = ['Desarrollo integral de proyectos de arquitectura', 'Proyecto
 .equipo li{padding:24px 0;border-bottom:1px solid var(--linea);display:grid;gap:6px}
 .serv-in{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px clamp(40px,6vw,120px);align-items:start}
 .serv-l{list-style:none;margin:0;padding:0;border-top:1px solid var(--texto)}
-.serv-l li{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:22px 0;border-bottom:1px solid #C9C3B8;align-items:baseline;font:400 clamp(20px,1.7vw,24px)/1.3 var(--titulo)}
+.serv-l li{padding:22px 0;border-bottom:1px solid #C8CAC5;font:400 clamp(20px,1.7vw,24px)/1.3 var(--titulo)}
 </style>

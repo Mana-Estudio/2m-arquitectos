@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Foto from '../components/Foto.astro';
+import Flecha from '../components/Flecha.astro';
 import { notas, fotos } from '../data';
 const imgs = fotos('blog');
 const [destacada, ...resto] = notas;
@@ -15,7 +16,7 @@ const [destacada, ...resto] = notas;
       <div style="display:grid;gap:16px;align-content:end">
         <span class="muted" style="font-size:14px">{destacada.fecha}</span>
         <h3 style="font:400 clamp(28px,3vw,44px)/1.1 var(--titulo);letter-spacing:-.025em;text-wrap:balance">{destacada.t}</h3>
-        <span style="text-decoration:underline;text-underline-offset:5px">Leer artículo →</span>
+        <span style="text-decoration:underline;text-underline-offset:5px">Leer artículo <Flecha /></span>
       </div>
     </a>
     <div class="grilla" style="border-top:1px solid var(--linea);padding-top:clamp(40px,4vw,56px)">
