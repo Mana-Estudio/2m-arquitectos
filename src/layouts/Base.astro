@@ -3,8 +3,8 @@ import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import { TEL, TEL_HREF, WA, EMAIL, fotos, navegacion, waTexto } from '../data';
 
-interface Props { title: string; description: string; activo?: string; image?: string; cabOscura?: boolean }
-const { title, description, activo = '', cabOscura = false } = Astro.props;
+interface Props { title: string; description: string; activo?: string; image?: string }
+const { title, description, activo = '' } = Astro.props;
 const enlaces = navegacion;
 const waHola = waTexto('Hola, 2M Arquitectos. Me gustaría hablar sobre un proyecto.');
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://www.2m-arquitectos.com');
@@ -37,7 +37,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
 </head>
 <body>
 <div class="progreso" aria-hidden="true"></div>
-<header class:list={['cab', { 'cab-osc': cabOscura }]}>
+<header class="cab">
   <div class="wrap cab-in">
     <a href="/" class="logo" aria-label="2M Arquitectos, ir al inicio"><span class="cuadro" aria-hidden="true"></span><b>2M</b><span>arquitectos</span></a>
     <nav aria-label="Principal" class="nav-esc">
@@ -142,12 +142,6 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
 .nav-esc a{position:relative;border-bottom:0!important}
 .nav-esc a::after{content:'';position:absolute;left:0;right:0;bottom:6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.16,1,.3,1)}
 .nav-esc a:hover::after,.nav-esc a[aria-current]::after{transform:scaleX(1);transform-origin:left}
-/* cabecera transparente sobre foto */
-.cab-osc:not(.bajado){background:transparent;border-color:rgba(255,255,255,.18);color:#fff}
-.cab-osc:not(.bajado) :is(.logo,.nav-esc a,.cab-tel,.cab-tel .muted){color:#fff}
-.cab-osc:not(.bajado) .cuadro{background:#fff}
-.cab-osc:not(.bajado) .hamb{border-color:rgba(255,255,255,.4)}.cab-osc:not(.bajado) .hamb span{background:#fff}
-.cab-osc{position:fixed;left:0;right:0;transition:background-color .35s ease,transform .45s cubic-bezier(.16,1,.3,1),box-shadow .3s ease}
 .progreso{position:fixed;top:0;left:0;right:0;height:2px;background:var(--verde);transform:scaleX(0);transform-origin:left;z-index:90;pointer-events:none}
 .menu-nav a{animation:menu-a .6s calc(var(--i,0)*60ms + .05s) cubic-bezier(.16,1,.3,1) both}
 @keyframes menu-a{from{opacity:0;transform:translateY(20px)}}
@@ -158,7 +152,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
   .barra-movil{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:1fr 1fr 1.3fr;background:var(--fondo);border-top:1px solid var(--linea);padding-bottom:env(safe-area-inset-bottom);transform:translateY(100%);transition:transform .45s cubic-bezier(.16,1,.3,1)}
   body.scrolleado .barra-movil{transform:none}
   body.ck-on .barra-movil{transform:translateY(100%)}
-  .barra-movil a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;font:500 15px 'IBM Plex Sans',sans-serif;text-decoration:none;color:var(--texto);border-right:1px solid var(--linea)}
+  .barra-movil a{display:flex;align-items:center;justify-content:center;gap:6px;min-height:56px;padding:0 4px;white-space:nowrap;font:500 14px 'IBM Plex Sans',sans-serif;text-decoration:none;color:var(--texto);border-right:1px solid var(--linea)}
   .barra-movil .bm-v{background:var(--verde);color:#fff;border:0}
   .wa{display:none!important}
   .pie-legal{padding-bottom:80px}
@@ -193,6 +187,7 @@ body.ck-on .wa{bottom:var(--ck-h,120px)}
 .ck-cfg .ck-btns{grid-template-columns:1fr 1fr;margin-top:12px}
 </style>
 <script>
+  import { miles } from '../lib/formato';
   // Revelado de fotos y títulos al entrar en pantalla
   const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const revelables = document.querySelectorAll<HTMLElement>('.foto:not(.no-revela), .h2, .h2s, .cta h2, [data-revela]');
@@ -207,14 +202,16 @@ body.ck-on .wa{bottom:var(--ck-h,120px)}
   const contar = (el: HTMLElement) => {
     const fin = +el.dataset.cuenta!, t0 = performance.now(), dur = 1600;
     const paso = (t: number) => {
-      const k = Math.min(1, (t - t0) / dur), v = 1 - Math.pow(1 - k, 4);
-      el.textContent = Math.round(fin * v).toLocaleString('es-ES');
+      const k = Math.min(1, Math.max(0, (t - t0) / dur)), v = 1 - Math.pow(1 - k, 4);
+      el.textContent = miles(fin * v);
       if (k < 1) requestAnimationFrame(paso);
     };
     requestAnimationFrame(paso);
+    // Garantiza la cifra final aunque la pestaña esté en segundo plano (rAF en pausa)
+    setTimeout(() => { el.textContent = miles(fin); }, dur + 100);
   };
   if (!sinMov && 'IntersectionObserver' in window) {
-    const ioC = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { contar(e.target as HTMLElement); ioC.unobserve(e.target); } }), { threshold: .6 });
+    const ioC = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { contar(e.target as HTMLElement); ioC.unobserve(e.target); } }), { threshold: .2 });
     contadores.forEach((c) => { c.textContent = '0'; ioC.observe(c); });
   }
   // Botones magnéticos (solo con puntero fino)

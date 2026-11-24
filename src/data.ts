@@ -135,8 +135,8 @@ export const navegacion = [
 export const cifras = [
   { n: 20, suf: '+', t: 'años proyectando en Madrid' },
   { n: 500, suf: '+', t: 'viviendas proyectadas' },
-  { n: 3, suf: '', t: 'comunidades con obra: Madrid, Galicia y Málaga' },
-  { n: 8, suf: '', t: 'profesionales en un solo equipo' },
+  { n: 3, suf: '', t: 'comunidades con obra: Madrid, Galicia y Andalucía' },
+  { n: equipo.length, suf: '', t: 'profesionales en un solo equipo' },
 ];
 
 // MUESTRA: testimonios de ejemplo, sustituir por reseñas reales

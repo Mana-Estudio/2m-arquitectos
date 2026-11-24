@@ -10,7 +10,7 @@ const horario = [['Lunes a jueves', '9:00 – 14:00 · 16:00 – 19:00'], ['Vier
 ---
 <Base title="Contacto · 2M Arquitectos" activo="contacto"
   description="Contacta con 2M Arquitectos, estudio de arquitectura en Boadilla del Monte. Llámanos al 609 071 175, escríbenos por WhatsApp o calcula tu presupuesto.">
-  <div class="wrap" style="padding-top:clamp(48px,6vw,96px)">
+  <div class="wrap" style="padding-top:clamp(36px,4.5vw,72px)">
     <div class="c-intro">
       <h1 class="h1">Hablemos de tu proyecto</h1>
       <p class="lead">Elige cómo prefieres contactar. Respondemos en menos de 24 horas laborables y la primera reunión no tiene coste.</p>
@@ -71,17 +71,17 @@ const horario = [['Lunes a jueves', '9:00 – 14:00 · 16:00 – 19:00'], ['Vier
 
 <style>
 .c-intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:18px 64px;align-items:end;margin-bottom:clamp(32px,4vw,56px)}
-.canales{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin-bottom:clamp(56px,7vw,104px)}
+.canales{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin-bottom:clamp(36px,4.5vw,72px)}
 .canal{position:relative;display:grid;gap:6px;padding:28px;border:1px solid var(--linea);text-decoration:none;color:var(--texto);background:#fff;overflow:hidden;isolation:isolate;transition:color .4s,border-color .4s}
 .canal::before{content:'';position:absolute;inset:0;background:var(--texto);transform:scaleY(0);transform-origin:bottom;transition:transform .55s cubic-bezier(.16,1,.3,1);z-index:-1}
 .canal:hover{color:#fff;border-color:var(--texto)}.canal:hover::before{transform:none}
 .c-wa{background:var(--verde);color:#fff;border-color:var(--verde)}.c-wa::before{background:var(--verde-osc)}
-.c-ic{width:48px;height:48px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;margin-bottom:28px;opacity:.9}
+.c-ic{width:48px;height:48px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;margin-bottom:20px;opacity:.9}
 .c-et{font:400 12px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
 .canal b{font:400 clamp(24px,2.2vw,30px)/1.15 var(--titulo);letter-spacing:-.02em}
 .canal>span:last-of-type{font-size:15px;opacity:.8}
 .canal :global(.flecha){position:absolute;top:28px;right:28px}
-.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:56px clamp(40px,6vw,120px);align-items:start}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:40px clamp(32px,5vw,88px);align-items:start}
 .bloque{border-top:1px solid var(--texto);padding-top:28px}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:20px 16px}
 .form label{display:grid;gap:8px;font-size:15px}
@@ -102,7 +102,7 @@ const horario = [['Lunes a jueves', '9:00 – 14:00 · 16:00 – 19:00'], ['Vier
 .abierto{display:inline-flex!important;align-items:center;gap:8px;font-size:14px;margin-top:6px;justify-content:flex-start!important}
 .abierto[hidden]{display:none!important}
 .abierto::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
-.faq-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:40px clamp(40px,6vw,112px)}
+.faq-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:32px clamp(32px,5vw,88px)}
 </style>
 <script>
   const form = document.querySelector<HTMLFormElement>('.form')!;

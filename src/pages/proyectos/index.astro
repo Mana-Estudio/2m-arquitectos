@@ -8,11 +8,13 @@ import { proyectos, fotos, waTexto } from '../../data';
 const unicos = (k: 'tipo' | 'zona', orden: string[]) => orden.filter((v) => proyectos.some((p) => p[k] === v));
 const tipos = ['Todos', ...unicos('tipo', ['Viviendas', 'Edificios', 'Terciario', 'Reformas'])];
 const zonas = ['Todas', ...unicos('zona', ['Madrid', 'Galicia', 'Málaga'])];
+// Tarjetas anchas: con 3 columnas, en las posiciones 0 y 9 completan filas sin dejar huecos
+const anchas = [0, 9];
 const previas = await Promise.all(proyectos.map((p) => getImage({ src: fotos(p.slug)[0], width: 560, format: 'webp', quality: 72 })));
 ---
 <Base title="Proyectos de arquitectura en Madrid · 2M Arquitectos" activo="proyectos"
   description="Viviendas unifamiliares, promociones, edificios y terciario en Madrid, Galicia y Málaga. Conoce los proyectos de 2M Arquitectos.">
-  <div class="wrap" style="padding-top:clamp(48px,6vw,96px);padding-bottom:var(--sec)">
+  <div class="wrap" style="padding-top:clamp(36px,4.5vw,72px);padding-bottom:var(--sec)">
     <div class="p-intro">
       <h1 class="h1">Proyectos <sup class="mono">{proyectos.length}</sup></h1>
       <p class="lead">“El movimiento se demuestra andando.” Viviendas unifamiliares, promociones, edificios y terciario en Madrid, Galicia y Málaga.</p>
@@ -30,11 +32,10 @@ const previas = await Promise.all(proyectos.map((p) => getImage({ src: fotos(p.s
     <p aria-live="polite" class="muted conteo" style="font-size:14px;margin-bottom:24px">{proyectos.length} proyectos</p>
     <h2 class="sr">Listado de proyectos</h2>
 
-    <div class="grilla lista-p" data-modo="galeria">
-      {proyectos.map((p, i) => <div class:list={['celda', { ancha: i % 7 === 0 }]} data-tipo={p.tipo} data-zona={p.zona}><Tarjeta p={p} sizes={i % 7 === 0 ? '(min-width: 960px) 66vw, 100vw' : '(min-width: 960px) 33vw, 100vw'} /></div>)}
+    <div class="lista-p">
+      {proyectos.map((p, i) => <div class:list={['celda', { ancha: anchas.includes(i) }]} data-tipo={p.tipo} data-zona={p.zona}><Tarjeta p={p} sizes={anchas.includes(i) ? '(min-width: 1360px) 850px, (min-width: 700px) 66vw, 100vw' : '(min-width: 1360px) 420px, (min-width: 700px) 50vw, 100vw'} /></div>)}
       <aside class="celda lead-card" data-fijo>
-        <span class="ojo ojo-c">¿Tienes parcela?</span>
-        <p>Te decimos qué puedes construir en ella antes de empezar.</p>
+        <div><span class="ojo ojo-c">¿Tienes parcela?</span><p>Te decimos qué puedes construir en ella antes de empezar.</p></div>
         <a href={waTexto('Hola, 2M Arquitectos. Tengo una parcela y quiero saber qué puedo construir.')} class="btn btn-c magnet" rel="noopener">Consultar gratis</a>
       </aside>
     </div>
@@ -75,11 +76,17 @@ const previas = await Promise.all(proyectos.map((p) => getImage({ src: fotos(p.s
 .filtros button[aria-pressed=true],.vistas button[aria-pressed=true]{background:var(--texto);border-color:var(--texto);color:#fff}
 .vistas{display:flex;gap:6px}
 @media (max-width:759px){.barra-f{position:static}.filtros span{width:100%}}
-.lista-p{--min:340px}
+.lista-p{display:grid;grid-template-columns:1fr;grid-auto-flow:row dense;gap:clamp(32px,3.5vw,48px) clamp(16px,2vw,28px)}
+@media (min-width:700px){.lista-p{grid-template-columns:repeat(2,minmax(0,1fr))}.celda.ancha{grid-column:span 2}.celda.ancha :global(.foto){aspect-ratio:16/9}}
+@media (min-width:1100px){
+  .lista-p{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* misma altura de foto que las tarjetas de al lado (4:3 en 1 columna = 8:3 aprox. en 2) */
+  .celda.ancha :global(.foto){aspect-ratio:2.76/1}
+  .lead-card{grid-column:1/-1;display:flex!important;align-items:center;justify-content:space-between}
+}
 .celda[hidden],.lista-p[hidden]{display:none}
-@media (min-width:960px){.celda.ancha{grid-column:span 2}.celda.ancha :global(.foto){aspect-ratio:16/9}}
-.lead-card{background:var(--verde);color:#fff;padding:clamp(24px,3vw,40px);display:grid;gap:20px;align-content:end;justify-items:start;min-height:320px}
-.lead-card p{font:300 clamp(24px,2.2vw,32px)/1.15 var(--titulo);letter-spacing:-.02em}
+.lead-card{background:var(--verde);color:#fff;padding:clamp(24px,3vw,40px);display:grid;gap:20px;align-content:end;justify-items:start}
+.lead-card p{font:300 clamp(24px,2.2vw,32px)/1.15 var(--titulo);letter-spacing:-.02em;margin-top:12px;max-width:28ch}
 .filas{list-style:none;margin:0;padding:0;border-top:1px solid var(--texto)}
 .filas[hidden],.filas li[hidden]{display:none}
 .filas a{display:grid;grid-template-columns:44px 2fr 1.4fr 1fr 24px;gap:16px;align-items:center;padding:22px 0;border-bottom:1px solid var(--linea);text-decoration:none;color:var(--texto);transition:padding .4s cubic-bezier(.16,1,.3,1),color .3s}
