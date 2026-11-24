@@ -1,0 +1,177 @@
+---
+import '../styles/global.css';
+import { TEL, TEL_HREF, WA, EMAIL } from '../data';
+
+interface Props { title: string; description: string; activo?: string; image?: string }
+const { title, description, activo = '' } = Astro.props;
+const enlaces = [['proyectos', 'Proyectos', '/proyectos/'], ['estudio', 'Estudio', '/estudio/'], ['blog', 'Blog', '/blog/'], ['contacto', 'Contacto', '/contacto/']];
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://www.2m-arquitectos.com');
+---
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:type" content="website">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org', '@type': 'Architect', name: '2M Arquitectos', url: 'https://www.2m-arquitectos.com',
+  telephone: '+34609071175', email: EMAIL,
+  address: { '@type': 'PostalAddress', streetAddress: 'Glorieta Virgen de las Nieves 4, local 1', postalCode: '28660', addressLocality: 'Boadilla del Monte', addressRegion: 'Madrid', addressCountry: 'ES' },
+})} />
+</head>
+<body>
+<header class="cab">
+  <div class="wrap cab-in">
+    <a href="/" class="logo" aria-label="2M Arquitectos, ir al inicio"><span class="cuadro" aria-hidden="true"></span><b>2M</b><span>arquitectos</span></a>
+    <nav aria-label="Principal" class="nav-esc">
+      {enlaces.map(([id, t, h]) => <a href={h} aria-current={id === activo ? 'page' : undefined}>{t}</a>)}
+    </nav>
+    <div class="cab-acc">
+      <a href={TEL_HREF} class="cab-tel"><span class="muted">Tel.</span> {TEL}</a>
+      <a href="/contacto/" class="btn btn-v cab-btn">Presupuesto</a>
+      <button type="button" class="hamb" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><span></span><span></span></button>
+    </div>
+  </div>
+  <div id="menu" class="menu" role="dialog" aria-label="Menú" hidden>
+    <div class="menu-top"><span class="logo"><b>2M</b><span>arquitectos</span></span><button type="button" class="cerrar" aria-label="Cerrar menú">×</button></div>
+    <nav aria-label="Principal móvil" class="menu-nav">
+      <a href="/">Inicio</a>
+      {enlaces.map(([, t, h]) => <a href={h}>{t}</a>)}
+    </nav>
+    <div class="menu-pie"><a class="btn btn-l" href={TEL_HREF}>Llamar al {TEL}</a><a class="btn btn-v" href="/contacto/">Pedir presupuesto</a></div>
+  </div>
+</header>
+
+<main><slot /></main>
+
+<footer class="pie">
+  <div class="wrap">
+    <div class="pie-cols">
+      <div>
+        <a href="/" class="logo logo-c" aria-label="2M Arquitectos, ir al inicio"><span class="cuadro" aria-hidden="true"></span><b>2M</b><span>arquitectos</span></a>
+        <p class="pie-txt">Estudio de arquitectura en Boadilla del Monte, Madrid. Obra en Madrid, Galicia y Málaga.</p>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <a href={TEL_HREF} class="pie-tel">{TEL}</a>
+        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        <p class="pie-txt">Glorieta Virgen de las Nieves 4, local 1<br>28660 Boadilla del Monte, Madrid</p>
+      </div>
+      <div>
+        <h2>Navegación</h2>
+        <a href="/proyectos/">Proyectos</a><a href="/estudio/">Estudio</a><a href="/blog/">Blog</a><a href="/contacto/">Contacto y presupuesto</a>
+      </div>
+      <div>
+        <h2>Síguenos</h2>
+        <a href="https://www.instagram.com/2m__arquitectos/" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/2mArquitectos" rel="noopener">Facebook</a>
+        <a href="https://www.youtube.com/channel/UC_EddfNAOoXKBpVy36c6uHA" rel="noopener">YouTube</a>
+      </div>
+    </div>
+    <div class="pie-legal">
+      <span>© 2026 2M Arquitectos</span>
+      <span class="fila"><a href="https://www.2m-arquitectos.com/politica-de-privacidad/">Privacidad</a><a href="https://www.2m-arquitectos.com/politica-de-cookies/">Cookies</a><button type="button" data-cfg>Configurar cookies</button></span>
+    </div>
+  </div>
+</footer>
+
+<a href={WA} class="wa" aria-label={`Escribir por WhatsApp al ${TEL}`} rel="noopener"><span aria-hidden="true"></span>WhatsApp</a>
+
+<div class="cookies" role="region" aria-label="Aviso de cookies" hidden>
+  <p>Usamos cookies propias y de análisis. <a href="https://www.2m-arquitectos.com/politica-de-cookies/">Más información</a></p>
+  <div class="ck-btns"><button type="button" data-ck="necesarias">Rechazar</button><button type="button" data-cfg>Configurar</button><button type="button" data-ck="todas">Aceptar</button></div>
+</div>
+<dialog class="ck-cfg" aria-labelledby="cfg-t">
+  <form method="dialog">
+    <h2 id="cfg-t">Configurar cookies</h2>
+    <div class="ck-row"><div><b>Necesarias</b><p>Permiten que la web funcione. Siempre activas.</p></div><span class="muted">Siempre</span></div>
+    <label class="ck-row"><span><b>Análisis</b><p>Nos ayudan a saber qué páginas se visitan.</p></span><input type="checkbox" name="analisis"></label>
+    <div class="ck-btns"><button value="cancelar">Cancelar</button><button value="guardar" class="osc">Guardar preferencias</button></div>
+  </form>
+</dialog>
+
+<style is:global>
+.cab{position:sticky;top:0;z-index:50;background:var(--fondo);border-bottom:1px solid var(--linea)}
+.cab-in{height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--texto);min-height:44px;font-family:var(--titulo)}
+.logo b{font-weight:500;font-size:24px;letter-spacing:-.04em}.logo span:last-child{font-size:16px}
+.cuadro{width:10px;height:10px;background:var(--verde)}
+.nav-esc{display:flex;gap:36px}
+.nav-esc a{font-size:15px;color:var(--suave);text-decoration:none;padding:12px 0;border-bottom:1px solid transparent}
+.nav-esc a:hover,.nav-esc a[aria-current]{color:var(--texto)}.nav-esc a[aria-current]{border-bottom-color:var(--texto)}
+.cab-acc{display:flex;align-items:center;gap:24px}
+.cab-tel{font-size:15px;text-decoration:none;min-height:44px;display:flex;align-items:center;gap:6px}
+.cab-btn{min-height:44px;padding:0 22px;font-size:15px}
+.hamb{display:none;width:44px;height:44px;border:1px solid var(--linea);background:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.hamb span{width:18px;height:1px;background:var(--texto)}
+.menu{position:fixed;inset:0;z-index:100;background:var(--fondo);display:flex;flex-direction:column}
+.menu[hidden]{display:none}
+.menu-top{height:72px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--linea)}
+.cerrar{width:44px;height:44px;border:1px solid var(--linea);background:none;font-size:22px;cursor:pointer}
+.menu-nav{display:flex;flex-direction:column;padding:16px 20px}
+.menu-nav a{font:400 30px/1 var(--titulo);letter-spacing:-.02em;text-decoration:none;padding:20px 0;border-bottom:1px solid var(--linea)}
+.menu-pie{margin-top:auto;padding:20px;display:grid;gap:10px}
+@media (max-width:959px){.nav-esc,.cab-tel{display:none}.hamb{display:flex}.cab-acc{gap:8px}.cab-btn{padding:0 16px}}
+.pie{background:var(--osc);color:#E9E6E0;padding-top:clamp(56px,7vw,96px)}
+.pie a{color:#E9E6E0;text-decoration:none;font-size:15px;min-height:44px;display:flex;align-items:center}.pie a:hover{color:#fff;text-decoration:underline}
+.pie h2{font:500 13px/1.4 'IBM Plex Sans',sans-serif;color:#9C988F;margin-bottom:4px}
+.pie-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px 32px;padding-bottom:56px;border-bottom:1px solid #3B3E3A}
+.pie-cols>div{display:grid;gap:4px;align-content:start}
+.logo-c{color:#F7F5F1!important}.logo-c .cuadro{background:#7FA88C}
+.pie-txt{font-size:15px;line-height:1.6;color:#B9B5AD;max-width:30ch;margin-top:8px}
+.pie .pie-tel{font:400 24px/1.2 var(--titulo);color:#F7F5F1}
+.pie-legal{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;justify-content:space-between;padding:12px 0 88px;font-size:13px;color:#9C988F}
+.pie-legal a,.pie-legal button{font-size:13px;color:#B9B5AD;text-decoration:underline;text-underline-offset:3px}
+.pie-legal button{background:none;border:0;padding:0;font-family:inherit;min-height:44px;cursor:pointer}
+.wa{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:10px;min-height:52px;padding:0 20px 0 16px;background:var(--verde);color:#fff;text-decoration:none;font:500 15px/1 'IBM Plex Sans',sans-serif;box-shadow:0 6px 20px rgba(29,31,28,.22);border-radius:26px;transition:bottom .2s}
+.wa:hover{color:#fff;background:var(--verde-osc)}.wa span{width:8px;height:8px;border-radius:50%;background:#BFE3C8}
+body.ck-on .wa{bottom:var(--ck-h,120px)}
+.cookies{position:fixed;z-index:70;left:50%;transform:translateX(-50%);bottom:16px;width:min(760px,calc(100% - 32px));background:#fff;border:1px solid var(--linea);box-shadow:0 10px 30px rgba(29,31,28,.08);padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+.cookies[hidden]{display:none}
+.cookies p{font-size:14px;line-height:1.4}
+.ck-btns{display:grid;grid-template-columns:repeat(3,auto);gap:8px}
+.ck-btns button{min-height:44px;padding:0 16px;border:1px solid var(--texto);background:#fff;color:var(--texto);font:500 14px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.ck-btns button:hover,.ck-btns .osc{background:var(--texto);color:#fff}
+@media (max-width:640px){.cookies{bottom:0;width:100%;border-width:1px 0 0;padding:10px 16px 12px}.ck-btns{grid-template-columns:repeat(3,1fr);width:100%}}
+.ck-cfg{border:0;padding:24px;max-width:520px;width:calc(100% - 32px)}
+.ck-cfg::backdrop{background:rgba(29,31,28,.45)}
+.ck-cfg h2{font:400 24px/1.2 var(--titulo);margin-bottom:12px}
+.ck-row{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--linea);cursor:pointer}
+.ck-row p{font-size:14px;color:var(--suave);margin-top:4px}
+.ck-row input{width:22px;height:22px;accent-color:var(--verde);flex:none}
+.ck-cfg .ck-btns{grid-template-columns:1fr 1fr;margin-top:12px}
+</style>
+<script>
+  const menu = document.getElementById('menu')!;
+  const hamb = document.querySelector<HTMLButtonElement>('.hamb')!;
+  hamb.addEventListener('click', () => { menu.hidden = false; hamb.setAttribute('aria-expanded', 'true'); });
+  menu.querySelector('.cerrar')!.addEventListener('click', () => { menu.hidden = true; hamb.setAttribute('aria-expanded', 'false'); });
+
+  const aviso = document.querySelector<HTMLElement>('.cookies')!;
+  const cfg = document.querySelector<HTMLDialogElement>('.ck-cfg')!;
+  const mostrar = (on: boolean) => {
+    aviso.hidden = !on;
+    document.body.classList.toggle('ck-on', on);
+    if (on) document.body.style.setProperty('--ck-h', aviso.offsetHeight + 28 + 'px');
+  };
+  const decidir = (v: string) => { try { localStorage.setItem('2m-cookies', v); } catch {} mostrar(false); };
+  let guardado: string | null = null;
+  try { guardado = localStorage.getItem('2m-cookies'); } catch {}
+  mostrar(!guardado);
+  document.querySelectorAll<HTMLButtonElement>('[data-ck]').forEach((b) => b.addEventListener('click', () => decidir(b.dataset.ck!)));
+  document.querySelectorAll('[data-cfg]').forEach((b) => b.addEventListener('click', () => cfg.showModal()));
+  cfg.addEventListener('close', () => {
+    if (cfg.returnValue === 'guardar') decidir((cfg.querySelector('input') as HTMLInputElement).checked ? 'todas' : 'necesarias');
+  });
+</script>
+</body>
+</html>

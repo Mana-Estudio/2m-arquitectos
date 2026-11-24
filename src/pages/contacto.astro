@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { TEL, TEL_HREF, WA, EMAIL } from '../data';
+const mapa = 'https://www.google.com/maps/search/?api=1&query=Glorieta+Virgen+de+las+Nieves+4+Boadilla+del+Monte';
+---
+<Base title="Contacto y presupuesto · 2M Arquitectos" activo="contacto"
+  description="Pide presupuesto a 2M Arquitectos, estudio de arquitectura en Boadilla del Monte. Llámanos al 609 071 175 o escríbenos por WhatsApp.">
+  <div class="wrap" style="padding-top:clamp(48px,6vw,96px);padding-bottom:var(--sec)">
+    <div style="display:grid;gap:18px;margin-bottom:clamp(40px,5vw,72px)">
+      <h1 class="h1">Pide presupuesto</h1>
+      <p class="lead">Cuéntanos tu proyecto en unas líneas. Te llamamos para concretarlo y te enviamos un presupuesto sin compromiso.</p>
+    </div>
+    <div class="dos">
+      <section aria-labelledby="h-form" class="bloque">
+        <h2 id="h-form" class="h2s" style="margin-bottom:24px">Formulario de presupuesto</h2>
+        <form class="form" data-email={EMAIL}>
+          <label>Nombre<input name="nombre" required autocomplete="name"></label>
+          <label>Teléfono<input name="telefono" type="tel" required autocomplete="tel"></label>
+          <label class="full">Email<input name="email" type="email" required autocomplete="email"></label>
+          <label>Tipo de proyecto<select name="tipo" required><option value="">Elige una opción</option><option>Vivienda unifamiliar</option><option>Promoción de viviendas</option><option>Edificio</option><option>Terciario</option><option>Reforma</option><option>Licencia de actividad</option></select></label>
+          <label>Zona<select name="zona" required><option value="">Elige una zona</option><option>Madrid, zona oeste</option><option>Resto de Madrid</option><option>Galicia</option><option>Málaga</option><option>Otra</option></select></label>
+          <label class="full">Mensaje<textarea name="mensaje" rows="5" placeholder="Parcela, metros aproximados, plazos…"></textarea></label>
+          <label class="full check"><input type="checkbox" required><span>He leído y acepto la <a href="https://www.2m-arquitectos.com/politica-de-privacidad/">política de privacidad</a>.</span></label>
+          <div class="full fila" style="align-items:center;gap:16px"><button type="submit" class="btn btn-v" style="min-height:56px;padding:0 36px">Enviar solicitud</button><span class="muted" style="font-size:14px">Todos los campos son obligatorios salvo el mensaje.</span></div>
+        </form>
+        <div class="ok" role="status" hidden>
+          <p style="font:400 26px/1.2 var(--titulo)">Gracias. Ya casi está.</p>
+          <p class="lead">Se ha abierto tu programa de correo con la solicitud lista: solo tienes que enviarla. Si lo prefieres, escríbenos por WhatsApp.</p>
+        </div>
+      </section>
+      <aside aria-labelledby="h-datos" class="bloque" style="display:grid;gap:32px">
+        <h2 id="h-datos" class="h2s">¿Prefieres hablar?</h2>
+        <div style="display:grid;gap:6px"><span class="muted" style="font-size:14px">Teléfono</span><a href={TEL_HREF} style="font:300 clamp(40px,4.4vw,60px)/1 var(--titulo);letter-spacing:-.03em;text-decoration:none">{TEL}</a></div>
+        <div class="fila"><a href={TEL_HREF} class="btn btn-l">Llamar</a><a href={WA} class="btn btn-v" rel="noopener">Escribir por WhatsApp</a></div>
+        <dl class="datos">
+          <div><dt>Email</dt><dd><a href={`mailto:${EMAIL}`}>{EMAIL}</a></dd></div>
+          <div><dt>Dirección</dt><dd>Glorieta Virgen de las Nieves 4, local 1<br>28660 Boadilla del Monte, Madrid</dd></div>
+        </dl>
+        <a href={mapa} class="link" rel="noopener">Cómo llegar →</a>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:56px clamp(40px,6vw,120px);align-items:start}
+.bloque{border-top:1px solid var(--texto);padding-top:28px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:20px 16px}
+.form label{display:grid;gap:8px;font-size:15px}
+.form .full{grid-column:1/-1}
+.form input:not([type=checkbox]),.form select,.form textarea{height:52px;padding:0 14px;border:1px solid #8C877E;background:#fff;font:400 16px 'IBM Plex Sans',sans-serif;color:var(--texto);border-radius:0}
+.form textarea{height:auto;padding:12px 14px;line-height:1.5;resize:vertical}
+.check{display:flex!important;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--cuerpo)}
+.check input{width:22px;height:22px;margin:0;flex:none;accent-color:var(--verde)}
+.ok{background:var(--piedra);padding:32px;display:grid;gap:12px}.ok[hidden]{display:none}
+.datos>div{display:grid;grid-template-columns:110px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--linea)}
+.datos>div:last-child{border-bottom:1px solid var(--linea)}
+.datos dt{font-size:15px;color:var(--suave)}.datos dd{font-size:16px;line-height:1.5}
+</style>
+<script>
+  const form = document.querySelector<HTMLFormElement>('.form')!;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const cuerpo = ['nombre', 'telefono', 'email', 'tipo', 'zona', 'mensaje'].map((k) => `${k[0].toUpperCase() + k.slice(1)}: ${d.get(k) ?? ''}`).join('\n');
+    location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Solicitud de presupuesto · ' + d.get('tipo'))}&body=${encodeURIComponent(cuerpo)}`;
+    form.hidden = true;
+    (document.querySelector('.ok') as HTMLElement).hidden = false;
+  });
+</script>

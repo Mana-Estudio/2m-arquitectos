@@ -1,0 +1,14 @@
+---
+import { TEL, TEL_HREF, WA } from '../data';
+interface Props { titulo: string; texto?: string }
+const { titulo, texto } = Astro.props;
+---
+<section class="cta" aria-labelledby="h-cta">
+  <div class="wrap sec in">
+    <div><h2 id="h-cta">{titulo}</h2>{texto && <p>{texto}</p>}</div>
+    <div style="display:grid;gap:12px;justify-items:start">
+      <div class="fila"><a href="/contacto/" class="btn btn-v">Pedir presupuesto</a><a href={WA} class="btn btn-c" rel="noopener">Escribir por WhatsApp</a></div>
+      <a href={TEL_HREF} class="link tel">o llama al {TEL}</a>
+    </div>
+  </div>
+</section>

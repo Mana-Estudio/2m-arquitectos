@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import { proyectos } from '../../data';
+const tipos = ['Todos', 'Viviendas', 'Edificios', 'Terciario', 'Reformas'];
+const zonas = ['Todas', 'Madrid', 'Galicia', 'Málaga'];
+---
+<Base title="Proyectos de arquitectura en Madrid · 2M Arquitectos" activo="proyectos"
+  description="Viviendas unifamiliares, promociones, edificios y terciario en Madrid, Galicia y Málaga. Conoce los proyectos de 2M Arquitectos.">
+  <div class="wrap" style="padding-top:clamp(48px,6vw,96px);padding-bottom:var(--sec)">
+    <div class="grid-intro"><h1 class="h1">Proyectos</h1><p class="lead">Viviendas unifamiliares, promociones, edificios y terciario en Madrid, Galicia y Málaga.</p></div>
+    <div role="group" aria-label="Filtrar proyectos" class="filtros">
+      <div><span>Tipología</span>{tipos.map((t, i) => <button type="button" data-f="tipo" data-v={t} aria-pressed={i === 0 ? 'true' : 'false'}>{t}</button>)}</div>
+      <div><span>Zona</span>{zonas.map((t, i) => <button type="button" data-f="zona" data-v={t} aria-pressed={i === 0 ? 'true' : 'false'}>{t}</button>)}</div>
+    </div>
+    <p aria-live="polite" class="muted conteo" style="font-size:14px;margin-bottom:24px">{proyectos.length} proyectos</p>
+    <h2 class="sr">Listado de proyectos</h2>
+    <div class="grilla lista-p">{proyectos.map((p) => <Tarjeta p={p} />)}</div>
+    <div class="vacio" hidden>
+      <p style="font:400 24px/1.3 var(--titulo);max-width:32ch">Todavía no hemos publicado proyectos con estos filtros.</p>
+      <p class="muted">Si tienes un proyecto de este tipo, cuéntanoslo.</p>
+      <div class="fila"><button type="button" class="btn btn-l limpiar">Quitar filtros</button><a href="/contacto/" class="btn btn-v">Pedir presupuesto</a></div>
+    </div>
+  </div>
+</Base>
+
+<style>
+.filtros{display:grid;gap:16px;padding:20px 0;border-top:1px solid var(--texto);border-bottom:1px solid var(--linea);margin-bottom:clamp(32px,4vw,48px)}
+.filtros>div{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.filtros span{font-size:14px;color:var(--suave);width:84px}
+.filtros button{min-height:44px;padding:0 18px;border:1px solid var(--linea);background:transparent;color:var(--texto);font:400 15px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.filtros button:hover{border-color:var(--texto)}
+.filtros button[aria-pressed=true]{background:var(--texto);border-color:var(--texto);color:#fff}
+.vacio{border:1px solid var(--linea);padding:clamp(32px,5vw,64px);display:grid;gap:16px;justify-items:start}
+.vacio[hidden]{display:none}
+</style>
+<script>
+  const estado: Record<string, string> = { tipo: 'Todos', zona: 'Todas' };
+  const tarjetas = [...document.querySelectorAll<HTMLElement>('.lista-p .tarjeta')];
+  const botones = [...document.querySelectorAll<HTMLButtonElement>('[data-f]')];
+  const aplicar = () => {
+    let n = 0;
+    tarjetas.forEach((t) => {
+      const ok = (estado.tipo === 'Todos' || t.dataset.tipo === estado.tipo) && (estado.zona === 'Todas' || t.dataset.zona === estado.zona);
+      t.hidden = !ok; if (ok) n++;
+    });
+    botones.forEach((b) => b.setAttribute('aria-pressed', String(estado[b.dataset.f!] === b.dataset.v)));
+    document.querySelector('.conteo')!.textContent = `${n} ${n === 1 ? 'proyecto' : 'proyectos'}`;
+    (document.querySelector('.vacio') as HTMLElement).hidden = n > 0;
+  };
+  botones.forEach((b) => b.addEventListener('click', () => { estado[b.dataset.f!] = b.dataset.v!; aplicar(); }));
+  document.querySelector('.limpiar')!.addEventListener('click', () => { estado.tipo = 'Todos'; estado.zona = 'Todas'; aplicar(); });
+</script>
