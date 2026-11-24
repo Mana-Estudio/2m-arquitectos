@@ -18,11 +18,11 @@ const fases = [
 ---
 <Base title="Servicios de arquitectura en Madrid · 2M Arquitectos" activo="servicios"
   description="Proyectos de vivienda unifamiliar, promociones, reformas y licencias de actividad en Madrid. Proyecto, licencia y dirección de obra con un solo equipo.">
-  <section class="s-hero caja" aria-labelledby="h1">
+  <section class="s-hero" aria-labelledby="h1">
     <div class="s-mosaico" aria-hidden="true">
-      {serviciosDet.map((s, i) => <Foto src={fotos(s.foto)[0]} alt="" sizes="(min-width: 1360px) 640px, 50vw" prioridad={i < 2} class="no-revela" />)}
+      {serviciosDet.map((s, i) => <Foto src={fotos(s.foto)[0]} alt="" sizes="50vw" prioridad={i < 2} class="no-revela" />)}
     </div>
-    <div class="s-hero-txt">
+    <div class="wrap s-hero-txt">
       <span class="ojo ojo-c">Servicios</span>
       <h1 id="h1">Del primer boceto a la entrega de llaves</h1>
       <nav class="s-indice" aria-label="Servicios">
@@ -33,9 +33,9 @@ const fases = [
 
   <div class="s-lista">
     {serviciosDet.map((s, i) => (
-      <section id={s.id} class:list={['s-bloque caja', { inv: i % 2 }]} aria-labelledby={`h-${s.id}`}>
+      <section id={s.id} class:list={['s-bloque', { inv: i % 2 }]} aria-labelledby={`h-${s.id}`}>
         <div class="s-foto">
-          <Foto src={fotos(s.foto)[1] ?? fotos(s.foto)[0]} alt={`Proyecto de ${s.t.toLowerCase()} de 2M Arquitectos`} sizes="(min-width: 1360px) 700px, (min-width: 960px) 55vw, 100vw" />
+          <Foto src={fotos(s.foto)[1] ?? fotos(s.foto)[0]} alt={`Proyecto de ${s.t.toLowerCase()} de 2M Arquitectos`} sizes="(min-width: 960px) 50vw, 100vw" />
           <span class="s-num" aria-hidden="true">{dos(i + 1)}</span>
         </div>
         <div class="s-txt">
@@ -52,7 +52,8 @@ const fases = [
     ))}
   </div>
 
-  <section class="caja oscuro fases-sec" aria-labelledby="h-fases">
+  <section class="oscuro fases-sec" aria-labelledby="h-fases">
+    <div class="wrap">
     <div class="grid-intro"><div style="display:grid;gap:16px"><span class="ojo ojo-c">Plazos</span><h2 id="h-fases" class="h2">Cuánto tarda cada fase</h2></div><p class="lead" style="color:#C9C5BD">Plazos habituales para una vivienda unifamiliar. Te damos un calendario concreto con el presupuesto.</p></div>
     <ol class="fases">
       {fases.map((f, i) => (
@@ -63,6 +64,7 @@ const fases = [
         </li>
       ))}
     </ol>
+    </div>
   </section>
 
   <section class="wrap sec faq-g" aria-labelledby="h-faq">
@@ -74,13 +76,13 @@ const fases = [
 </Base>
 
 <style>
-.s-hero{position:relative;min-height:min(calc(100svh - 96px),760px);margin-top:clamp(8px,1vw,16px);background:var(--osc);color:#fff;display:grid;align-items:end;overflow:hidden}
+.s-hero{position:relative;min-height:min(calc(100svh - 72px),880px);background:var(--osc);color:#fff;display:grid;align-items:end;overflow:hidden}
 .s-mosaico{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;opacity:.45}
 .s-mosaico :global(.foto){height:100%}
 .s-mosaico :global(img){animation:zoom 14s ease-out both}
 @keyframes zoom{from{transform:scale(1.15)}}
 .s-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--osc) 10%,rgba(29,31,28,.3))}
-.s-hero-txt{position:relative;z-index:1;padding:clamp(72px,9vw,140px) var(--in) clamp(24px,3.5vw,48px);display:grid;gap:24px}
+.s-hero-txt{position:relative;z-index:1;width:100%;padding-top:clamp(72px,9vw,140px);padding-bottom:clamp(28px,4vw,56px);display:grid;gap:24px}
 .s-hero h1{font:300 clamp(42px,6.4vw,100px)/.95 var(--titulo);letter-spacing:-.045em;max-width:14ch;animation:sube 1s cubic-bezier(.16,1,.3,1) both}
 @keyframes sube{from{opacity:0;transform:translateY(24px)}}
 .s-indice{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));column-gap:24px;border-top:1px solid rgba(255,255,255,.22)}
@@ -88,20 +90,21 @@ const fases = [
 .s-indice a .mono{color:#9C988F}
 .s-indice a :global(.flecha){margin-left:auto;transform:rotate(90deg)}
 .s-indice a:hover{color:#B9E0C4}
-.s-lista{display:grid;gap:clamp(16px,2vw,28px);padding-block:clamp(16px,2vw,28px) var(--sec)}
-.s-bloque{display:grid;grid-template-columns:minmax(0,11fr) minmax(0,9fr);align-items:center;background:#fff;scroll-margin-top:16px}
-.s-bloque.inv{grid-template-columns:minmax(0,9fr) minmax(0,11fr)}
+.s-lista{padding-bottom:var(--sec)}
+/* Foto hasta el borde de la pantalla; el texto respeta la columna */
+.s-bloque{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;scroll-margin-top:72px}
 .s-bloque.inv .s-foto{order:2}
 .s-foto{position:relative;height:100%;min-height:clamp(340px,40vw,600px)}
 .s-foto :global(.foto){position:absolute;inset:0}
 .s-num{position:absolute;bottom:-.14em;right:16px;font:300 clamp(110px,13vw,200px)/1 var(--titulo);letter-spacing:-.06em;color:#fff;pointer-events:none}
 .s-bloque.inv .s-num{right:auto;left:16px}
-.s-txt{padding:clamp(32px,4.5vw,72px) var(--in);display:grid;gap:20px;justify-items:start}
+.s-txt{padding:clamp(40px,5vw,80px) var(--margen) clamp(40px,5vw,80px) clamp(32px,5vw,88px);display:grid;gap:20px;justify-items:start}
+.s-bloque.inv .s-txt{padding-left:var(--margen);padding-right:clamp(32px,5vw,88px)}
 .incluye{list-style:none;margin:0;padding:0;width:100%;border-top:1px solid var(--linea)}
 .incluye li{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--linea);font-size:16px}
 .incluye svg{color:var(--verde);flex:none}
-@media (max-width:959px){.s-bloque,.s-bloque.inv{grid-template-columns:1fr}.s-bloque.inv .s-foto{order:0}.s-foto{min-height:56vw}}
-.fases-sec{padding:clamp(36px,5vw,80px) var(--in)}
+@media (max-width:959px){.s-bloque{grid-template-columns:1fr}.s-bloque.inv .s-foto{order:0}.s-foto{min-height:56vw}.s-txt,.s-bloque.inv .s-txt{padding:clamp(32px,6vw,48px) var(--pad)}}
+.fases-sec{padding-block:clamp(48px,6vw,96px)}
 .fases{list-style:none;margin:0;padding:0;border-top:1px solid #3B3E3A}
 .fases li{display:grid;grid-template-columns:48px minmax(0,1.2fr) minmax(0,1fr);gap:12px 32px;align-items:center;padding:22px 0;border-bottom:1px solid #3B3E3A}
 .fases .mono{color:#7F7B73}

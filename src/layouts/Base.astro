@@ -33,7 +33,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
   telephone: '+34609071175', email: EMAIL,
   address: { '@type': 'PostalAddress', streetAddress: 'Glorieta Virgen de las Nieves 4, local 1', postalCode: '28660', addressLocality: 'Boadilla del Monte', addressRegion: 'Madrid', addressCountry: 'ES' },
 })} />
-<script is:inline>document.documentElement.classList.add('js')</script>
+<script is:inline>(()=>{const r=document.documentElement;r.classList.add('js');const f=()=>r.style.setProperty('--vw',r.clientWidth/100+'px');f();if('ResizeObserver' in window)new ResizeObserver(f).observe(r);else addEventListener('resize',f)})()</script>
 </head>
 <body>
 <div class="progreso" aria-hidden="true"></div>

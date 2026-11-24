@@ -5,9 +5,9 @@ import { TEL, TEL_HREF, fotos, waTexto } from '../data';
 interface Props { titulo: string; texto?: string; foto?: string }
 const { titulo, texto = 'Cuéntanos qué quieres construir y dónde. Respondemos en menos de 24 horas laborables.', foto = 'valle-de-cares' } = Astro.props;
 ---
-<section class="cta caja" aria-labelledby="h-cta">
-  <Foto src={fotos(foto)[0]} alt="" sizes="(min-width: 1360px) 1280px, 100vw" class="cta-foto" />
-  <div class="in cta-in">
+<section class="cta" aria-labelledby="h-cta">
+  <Foto src={fotos(foto)[0]} alt="" sizes="100vw" class="cta-foto" />
+  <div class="wrap in cta-in">
     <div><span class="ojo ojo-c">Primera reunión sin coste</span><h2 id="h-cta" style="margin-top:20px">{titulo}</h2>{texto && <p>{texto}</p>}</div>
     <div style="display:grid;gap:14px;justify-items:start">
       <div class="fila"><a href="/presupuesto/" class="btn btn-v btn-f magnet">Calcular presupuesto <Flecha /></a><a href={waTexto('Hola, 2M Arquitectos. Quiero contaros mi proyecto.')} class="btn btn-c magnet" rel="noopener">Escribir por WhatsApp</a></div>
@@ -16,8 +16,8 @@ const { titulo, texto = 'Cuéntanos qué quieres construir y dónde. Respondemos
   </div>
 </section>
 <style>
-.cta{position:relative;overflow:hidden;isolation:isolate;margin-bottom:clamp(20px,3vw,40px)}
-.cta-in{padding:clamp(40px,5.5vw,88px) var(--in)}
+.cta{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid #3B3E3A}
+.cta-in{padding-block:clamp(48px,6vw,96px)}
 .cta :global(.cta-foto){position:absolute;inset:0;z-index:-1;opacity:.3}
 .cta::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--osc) 30%,transparent)}
 </style>
