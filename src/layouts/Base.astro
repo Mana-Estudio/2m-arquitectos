@@ -32,6 +32,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
   telephone: '+34609071175', email: EMAIL,
   address: { '@type': 'PostalAddress', streetAddress: 'Glorieta Virgen de las Nieves 4, local 1', postalCode: '28660', addressLocality: 'Boadilla del Monte', addressRegion: 'Madrid', addressCountry: 'ES' },
 })} />
+<script is:inline>document.documentElement.classList.add('js')</script>
 </head>
 <body>
 <header class="cab">
@@ -156,6 +157,27 @@ body.ck-on .wa{bottom:var(--ck-h,120px)}
 .ck-cfg .ck-btns{grid-template-columns:1fr 1fr;margin-top:12px}
 </style>
 <script>
+  // Revelado de fotos y títulos al entrar en pantalla
+  const sinMov = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revelables = document.querySelectorAll<HTMLElement>('.foto:not(.no-revela), .h2, .h2s, .cta h2');
+  if (!sinMov && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px' });
+    revelables.forEach((el) => { el.classList.add('revela'); io.observe(el); });
+  }
+  // Cabecera: sombra al bajar, se oculta al bajar y vuelve al subir
+  const cab = document.querySelector<HTMLElement>('.cab')!;
+  let ultimo = scrollY, pendiente = false;
+  addEventListener('scroll', () => {
+    if (pendiente) return; pendiente = true;
+    requestAnimationFrame(() => {
+      const y = scrollY;
+      cab.classList.toggle('bajado', y > 8);
+      cab.classList.toggle('oculta', y > 400 && y > ultimo && !document.querySelector('.menu:not([hidden])'));
+      ultimo = y; pendiente = false;
+    });
+  }, { passive: true });
   const menu = document.getElementById('menu')!;
   const hamb = document.querySelector<HTMLButtonElement>('.hamb')!;
   hamb.addEventListener('click', () => { menu.hidden = false; hamb.setAttribute('aria-expanded', 'true'); });

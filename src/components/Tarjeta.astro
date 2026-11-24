@@ -5,7 +5,7 @@ import { fotos, type Proyecto } from '../data';
 interface Props { p: Proyecto; sizes?: string }
 const { p, sizes } = Astro.props;
 ---
-<a href={`/proyectos/${p.slug}/`} class="tarjeta" data-tipo={p.tipo} data-zona={p.zona}>
-  <Foto src={fotos(p.slug)[0]} alt={`${p.nombre} en ${p.lugar}`} sizes={sizes} />
+<a href={`/proyectos/${p.slug}/`} class="tarjeta" style={`view-transition-name:tarjeta-${p.slug}`} data-tipo={p.tipo} data-zona={p.zona}>
+  <Foto src={fotos(p.slug)[0]} alt={`${p.nombre} en ${p.lugar}`} sizes={sizes} style={`view-transition-name:foto-${p.slug}`} />
   <div><h3>{p.nombre}</h3><p>{p.lugar}</p></div>
 </a>

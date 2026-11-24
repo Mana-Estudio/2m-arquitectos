@@ -6,7 +6,7 @@ interface Props { src: ImageMetadata; alt: string; sizes?: string; prioridad?: b
 const { src, alt, sizes = '(min-width: 960px) 33vw, 100vw', prioridad = false, class: cls = '', style } = Astro.props;
 const widths = [480, 800, 1200, 1600, 2400].filter((w) => w <= src.width);
 ---
-<div class:list={['foto', cls]} style={style}>
+<div class:list={['foto', cls, { 'no-revela': prioridad }]} style={style}>
   <Image src={src} alt={alt} widths={widths.length ? widths : [src.width]} sizes={sizes} format="webp" quality={78}
     loading={prioridad ? 'eager' : 'lazy'} fetchpriority={prioridad ? 'high' : 'auto'} />
 </div>

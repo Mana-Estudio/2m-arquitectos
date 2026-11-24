@@ -49,6 +49,10 @@ const zonas = ['Todas', ...unicos('zona', ['Madrid', 'Galicia', 'Málaga'])];
     document.querySelector('.conteo')!.textContent = `${n} ${n === 1 ? 'proyecto' : 'proyectos'}`;
     (document.querySelector('.vacio') as HTMLElement).hidden = n > 0;
   };
-  botones.forEach((b) => b.addEventListener('click', () => { estado[b.dataset.f!] = b.dataset.v!; aplicar(); }));
-  document.querySelector('.limpiar')!.addEventListener('click', () => { estado.tipo = 'Todos'; estado.zona = 'Todas'; aplicar(); });
+  const transicion = (fn: () => void) => {
+    const d = document as Document & { startViewTransition?: (f: () => void) => unknown };
+    if (d.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.startViewTransition(fn); else fn();
+  };
+  botones.forEach((b) => b.addEventListener('click', () => transicion(() => { estado[b.dataset.f!] = b.dataset.v!; aplicar(); })));
+  document.querySelector('.limpiar')!.addEventListener('click', () => transicion(() => { estado.tipo = 'Todos'; estado.zona = 'Todas'; aplicar(); }));
 </script>
