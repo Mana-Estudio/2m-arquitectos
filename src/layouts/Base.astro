@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { getImage } from 'astro:assets';
 import { TEL, TEL_HREF, WA, EMAIL, fotos, navegacion, waTexto } from '../data';
 import { DEMO, SITE } from '../site.mjs';
+import FirmaMana from '../components/FirmaMana.astro';
 
 interface Props { title: string; description: string; activo?: string; image?: string }
 const { title, description, activo = '' } = Astro.props;
@@ -90,6 +91,7 @@ const og = await getImage({ src: fotos('las-lomas-hills-6')[0], width: 1200, hei
     <div class="pie-legal">
       <span>© 2026 2M Arquitectos</span>
       <span class="fila"><a href="https://www.2m-arquitectos.com/politica-de-privacidad/">Privacidad</a><a href="https://www.2m-arquitectos.com/politica-de-cookies/">Cookies</a><button type="button" data-cfg>Configurar cookies</button></span>
+      <FirmaMana cliente="2m-arquitectos" />
     </div>
   </div>
 </footer>
